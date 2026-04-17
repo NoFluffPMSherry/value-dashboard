@@ -22,6 +22,7 @@ const { useState, useEffect, useRef } = React;
 const MONTHS = ["JAN 2026","FEB 2026","MAR 2026","APR 2026"];
 const MDATA = [
   { // JAN 2026
+    hours:"122 hrs",
     quotes:{ pct:"61%", sub:"80 of 131 quotes", trend:"+2pts", dir:"up",
       bar:[{month:"Oct",value:57},{month:"Nov",value:58},{month:"Dec",value:59},{month:"Jan",value:61,label:"61%"}] },
     parts:{ val:"361", sub:"from 78 jobs", trend:"+3%", dir:"up",
@@ -35,6 +36,7 @@ const MDATA = [
     compliance:2,
   },
   { // FEB 2026
+    hours:"128 hrs",
     quotes:{ pct:"63%", sub:"83 of 132 quotes", trend:"+2pts", dir:"up",
       bar:[{month:"Nov",value:58},{month:"Dec",value:59},{month:"Jan",value:61},{month:"Feb",value:63,label:"63%"}] },
     parts:{ val:"378", sub:"from 81 jobs", trend:"+5%", dir:"up",
@@ -48,6 +50,7 @@ const MDATA = [
     compliance:3,
   },
   { // MAR 2026
+    hours:"133 hrs",
     quotes:{ pct:"64%", sub:"85 of 133 quotes", trend:"+1pt", dir:"up",
       bar:[{month:"Dec",value:59},{month:"Jan",value:61},{month:"Feb",value:63},{month:"Mar",value:64,label:"64%"}] },
     parts:{ val:"381", sub:"from 83 jobs", trend:"+1%", dir:"up",
@@ -61,6 +64,7 @@ const MDATA = [
     compliance:3,
   },
   { // APR 2026
+    hours:"140 hrs",
     quotes:{ pct:"68%", sub:"89 of 131 quotes", trend:"+4pts", dir:"up",
       bar:[{month:"Jan",value:61},{month:"Feb",value:63},{month:"Mar",value:64},{month:"Apr",value:68,label:"68%"}] },
     parts:{ val:"412", sub:"from 89 jobs", trend:"+8%", dir:"up",
@@ -409,7 +413,7 @@ function Dashboard() {
               <KpiCell icon={pulseIcon} name="Gross Profit" value={md.profit.val} sub={md.profit.sub}
                 trendVal={md.profit.trend} trendDir={md.profit.dir} trendNote="margin vs last mo."
                 barData={md.profit.bar}/>
-              <KpiCell icon={clockIcon} name="Hours Saved" value={isCurrent?"140 hrs":"—"} sub={isCurrent?"Quote and admin time saved":"Not available for past months"}
+              <KpiCell icon={clockIcon} name="Hours Saved" value={md.hours} sub="Quote and admin time saved"
                 trendDir="up" trendVal="" trendNote="vs manual quote &amp; admin workflow" last
                 infoTooltip="Estimated based on avg time saved per quote sent and order placed, compared to a manual phone/email workflow. Actual savings vary by shop process."/>
             </div>
