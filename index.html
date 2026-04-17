@@ -19,6 +19,62 @@
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
+const MONTHS = ["JAN 2026","FEB 2026","MAR 2026","APR 2026"];
+const MDATA = [
+  { // JAN 2026
+    quotes:{ pct:"61%", sub:"80 of 131 quotes", trend:"+2pts", dir:"up",
+      bar:[{month:"Oct",value:57},{month:"Nov",value:58},{month:"Dec",value:59},{month:"Jan",value:61,label:"61%"}] },
+    parts:{ val:"361", sub:"from 78 jobs", trend:"+3%", dir:"up",
+      bar:[{month:"Oct",value:340},{month:"Nov",value:345},{month:"Dec",value:350},{month:"Jan",value:361,label:"361"}] },
+    spend:{ val:"$61.2K", sub:"$785 avg per job", trend:"+5%", dir:"warn",
+      bar:[{month:"Oct",value:55},{month:"Nov",value:57},{month:"Dec",value:58},{month:"Jan",value:61.2,label:"$61.2K"}] },
+    profit:{ val:"$15.1K", sub:"23.0% margin", trend:"+0.3pts", dir:"up",
+      bar:[{month:"Oct",value:13.1},{month:"Nov",value:13.8},{month:"Dec",value:14.5},{month:"Jan",value:15.1,label:"$15.1K"}] },
+    missed:{ total:"$2,840", vsLast:"+8% vs last month", badge:"UP THIS MONTH", lines:98, avg:"+$13", largest:"$89" },
+    nla:{ cost:"$4,210", days:"16", vsLast:"Avg delay down from 19 days last month", parts:15, jobs:9, avgCost:"$281" },
+    compliance:2,
+  },
+  { // FEB 2026
+    quotes:{ pct:"63%", sub:"83 of 132 quotes", trend:"+2pts", dir:"up",
+      bar:[{month:"Nov",value:58},{month:"Dec",value:59},{month:"Jan",value:61},{month:"Feb",value:63,label:"63%"}] },
+    parts:{ val:"378", sub:"from 81 jobs", trend:"+5%", dir:"up",
+      bar:[{month:"Nov",value:345},{month:"Dec",value:350},{month:"Jan",value:361},{month:"Feb",value:378,label:"378"}] },
+    spend:{ val:"$63.8K", sub:"$788 avg per job", trend:"+4%", dir:"warn",
+      bar:[{month:"Nov",value:57},{month:"Dec",value:58},{month:"Jan",value:61.2},{month:"Feb",value:63.8,label:"$63.8K"}] },
+    profit:{ val:"$16.2K", sub:"23.6% margin", trend:"+0.6pts", dir:"up",
+      bar:[{month:"Nov",value:13.8},{month:"Dec",value:14.5},{month:"Jan",value:15.1},{month:"Feb",value:16.2,label:"$16.2K"}] },
+    missed:{ total:"$3,110", vsLast:"+10% vs last month", badge:"UP THIS MONTH", lines:108, avg:"+$15", largest:"$97" },
+    nla:{ cost:"$5,020", days:"19", vsLast:"Avg delay up from 16 days last month", parts:18, jobs:11, avgCost:"$279" },
+    compliance:3,
+  },
+  { // MAR 2026
+    quotes:{ pct:"64%", sub:"85 of 133 quotes", trend:"+1pt", dir:"up",
+      bar:[{month:"Dec",value:59},{month:"Jan",value:61},{month:"Feb",value:63},{month:"Mar",value:64,label:"64%"}] },
+    parts:{ val:"381", sub:"from 83 jobs", trend:"+1%", dir:"up",
+      bar:[{month:"Dec",value:350},{month:"Jan",value:361},{month:"Feb",value:378},{month:"Mar",value:381,label:"381"}] },
+    spend:{ val:"$66.3K", sub:"$799 avg per job", trend:"+4%", dir:"warn",
+      bar:[{month:"Dec",value:58},{month:"Jan",value:61.2},{month:"Feb",value:63.8},{month:"Mar",value:66.3,label:"$66.3K"}] },
+    profit:{ val:"$17.4K", sub:"24.6% margin", trend:"+1.0pt", dir:"up",
+      bar:[{month:"Dec",value:14.5},{month:"Jan",value:15.1},{month:"Feb",value:16.2},{month:"Mar",value:17.4,label:"$17.4K"}] },
+    missed:{ total:"$3,650", vsLast:"+18% vs last month", badge:"UP THIS MONTH", lines:116, avg:"+$16", largest:"$121" },
+    nla:{ cost:"$5,890", days:"18", vsLast:"Avg delay down from 19 days last month", parts:20, jobs:12, avgCost:"$295" },
+    compliance:3,
+  },
+  { // APR 2026
+    quotes:{ pct:"68%", sub:"89 of 131 quotes", trend:"+4pts", dir:"up",
+      bar:[{month:"Jan",value:61},{month:"Feb",value:63},{month:"Mar",value:64},{month:"Apr",value:68,label:"68%"}] },
+    parts:{ val:"412", sub:"from 89 jobs", trend:"+8%", dir:"up",
+      bar:[{month:"Jan",value:361},{month:"Feb",value:378},{month:"Mar",value:381},{month:"Apr",value:412,label:"412"}] },
+    spend:{ val:"$74.2K", sub:"$834 avg per job", trend:"+12%", dir:"warn",
+      bar:[{month:"Jan",value:61},{month:"Feb",value:63},{month:"Mar",value:66},{month:"Apr",value:74.2,label:"$74.2K"}] },
+    profit:{ val:"$18.4K", sub:"24.8% margin", trend:"+1.2pts", dir:"up",
+      bar:[{month:"Jan",value:15.1},{month:"Feb",value:16.2},{month:"Mar",value:17.4},{month:"Apr",value:18.4,label:"$18.4K"}] },
+    missed:{ total:"$4,320", vsLast:"+18% vs last month", badge:"UP THIS MONTH", lines:124, avg:"+$18", largest:"$142" },
+    nla:{ cost:"$6,840", days:"23", vsLast:"Avg delay up from 18 days last month", parts:23, jobs:14, avgCost:"$297" },
+    compliance:3,
+  },
+];
+
 const G = {
   green:"#2B8A3E", greenDark:"#1E6B2F", greenLight:"#E8F5E9",
   amber:"#E07A00", amberLight:"#FFF8E1",
@@ -221,6 +277,9 @@ function StatRow({ label, val }) {
 
 function Dashboard() {
   const [nav, setNav] = useState("DASHBOARD");
+  const [monthIdx, setMonthIdx] = useState(3); // 3 = APR 2026 (current)
+  const md = MDATA[monthIdx];
+  const isCurrent = monthIdx === MONTHS.length - 1;
   const subNavs = ["DASHBOARD","REPORTING","KNOWLEDGE CENTRE","SETTINGS"];
   const docIcon = <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>;
   const boxIcon = <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>;
@@ -293,25 +352,38 @@ function Dashboard() {
           <div style={s.monthPanel}>
             <div style={s.monthHeader}>
               <span style={{ fontSize:12, fontWeight:700, letterSpacing:.5 }}>MONTH TO DATE IN NUMBERS</span>
-              <span style={{ background:"#fff", color:G.green, fontSize:10, fontWeight:700, padding:"2px 10px", borderRadius:2 }}>APR 2026</span>
+              <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                <button onClick={()=>setMonthIdx(i=>Math.max(0,i-1))} disabled={monthIdx===0}
+                  style={{ background:"rgba(255,255,255,0.15)", border:"none", color:"#fff", borderRadius:2,
+                    fontSize:13, fontWeight:700, width:22, height:22, cursor:monthIdx===0?"not-allowed":"pointer",
+                    opacity:monthIdx===0?0.35:1, display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
+                <span style={{ background:"#fff", color:G.green, fontSize:10, fontWeight:700, padding:"2px 10px", borderRadius:2, minWidth:72, textAlign:"center" }}>
+                  {MONTHS[monthIdx]}
+                </span>
+                <button onClick={()=>setMonthIdx(i=>Math.min(MONTHS.length-1,i+1))} disabled={isCurrent}
+                  style={{ background:"rgba(255,255,255,0.15)", border:"none", color:"#fff", borderRadius:2,
+                    fontSize:13, fontWeight:700, width:22, height:22, cursor:isCurrent?"not-allowed":"pointer",
+                    opacity:isCurrent?0.35:1, display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
+              </div>
             </div>
             <div style={{ fontSize:11, color:G.gray500, padding:"5px 14px 6px", borderBottom:"1px solid "+G.gray100 }}>
-              A snapshot of how PartsCheck is powering your business this month
+              {isCurrent ? "A snapshot of how PartsCheck is powering your business this month"
+                : "A snapshot of how PartsCheck powered your business in "+MONTHS[monthIdx]}
             </div>
             <div style={s.kpiRow}>
-              <KpiCell icon={docIcon} name="Quotes Converted" value="68%" sub="89 of 131 quotes"
-                trendVal="+4pts" trendDir="up" trendNote="vs same period last mo."
-                barData={[{month:"Jan",value:61},{month:"Feb",value:63},{month:"Mar",value:64},{month:"Apr",value:68,label:"68%"}]}/>
-              <KpiCell icon={boxIcon} name="Parts Ordered" value="412" sub="from 89 jobs"
-                trendVal="+8%" trendDir="up" trendNote="vs same period last mo."
-                barData={[{month:"Jan",value:361},{month:"Feb",value:378},{month:"Mar",value:381},{month:"Apr",value:412,label:"412"}]}/>
-              <KpiCell icon={dollarIcon} name="Total Spend" value="$74.2K" sub="$834 avg per job"
-                trendVal="+12%" trendDir="warn" trendNote="vs same period last mo."
-                barData={[{month:"Jan",value:61},{month:"Feb",value:63},{month:"Mar",value:66},{month:"Apr",value:74.2,label:"$74.2K"}]}/>
-              <KpiCell icon={pulseIcon} name="Gross Profit" value="$18.4K" sub="24.8% margin"
-                trendVal="+1.2pts" trendDir="up" trendNote="margin vs last mo."
-                barData={[{month:"Jan",value:15.1},{month:"Feb",value:16.2},{month:"Mar",value:17.4},{month:"Apr",value:18.4,label:"$18.4K"}]}/>
-              <KpiCell icon={clockIcon} name="Hours Saved" value="140 hrs" sub="Quote and admin time saved"
+              <KpiCell icon={docIcon} name="Quotes Converted" value={md.quotes.pct} sub={md.quotes.sub}
+                trendVal={md.quotes.trend} trendDir={md.quotes.dir} trendNote="vs same period last mo."
+                barData={md.quotes.bar}/>
+              <KpiCell icon={boxIcon} name="Parts Ordered" value={md.parts.val} sub={md.parts.sub}
+                trendVal={md.parts.trend} trendDir={md.parts.dir} trendNote="vs same period last mo."
+                barData={md.parts.bar}/>
+              <KpiCell icon={dollarIcon} name="Total Spend" value={md.spend.val} sub={md.spend.sub}
+                trendVal={md.spend.trend} trendDir={md.spend.dir} trendNote="vs same period last mo."
+                barData={md.spend.bar}/>
+              <KpiCell icon={pulseIcon} name="Gross Profit" value={md.profit.val} sub={md.profit.sub}
+                trendVal={md.profit.trend} trendDir={md.profit.dir} trendNote="margin vs last mo."
+                barData={md.profit.bar}/>
+              <KpiCell icon={clockIcon} name="Hours Saved" value={isCurrent?"140 hrs":"—"} sub={isCurrent?"Quote and admin time saved":"Not available for past months"}
                 trendDir="neutral" trendNote="Estimated based on avg workflow" last/>
             </div>
           </div>
@@ -323,7 +395,7 @@ function Dashboard() {
             <div style={s.widget}>
               <div style={s.widgetHead}>
                 <span style={{ fontSize:12, fontWeight:700, color:G.gray800 }}>PART TYPE MIX</span>
-                <Badge text="APR 2026" bg="#3b82f6" color="#fff"/>
+                <Badge text={MONTHS[monthIdx]} bg="#3b82f6" color="#fff"/>
               </div>
               <div style={s.widgetBody}>
                 <MixBar/>
@@ -352,19 +424,19 @@ function Dashboard() {
             <div style={s.widget}>
               <div style={s.widgetHead}>
                 <span style={{ fontSize:12, fontWeight:700, color:G.gray800 }}>MISSED SAVINGS</span>
-                <Badge text="UP THIS MONTH" bg={G.redLight} color={G.red}/>
+                <Badge text={md.missed.badge} bg={G.redLight} color={G.red}/>
               </div>
               <div style={s.widgetBody}>
-                <div style={{ fontSize:24, fontWeight:700, color:G.red, lineHeight:1 }}>$4,320</div>
+                <div style={{ fontSize:24, fontWeight:700, color:G.red, lineHeight:1 }}>{md.missed.total}</div>
                 <div style={{ fontSize:10, color:G.gray600, marginTop:3, marginBottom:8 }}>above best available price this month</div>
                 <div style={{ display:"inline-flex", background:G.redLight, color:G.red, fontSize:10, fontWeight:700, padding:"2px 7px", borderRadius:2, marginBottom:10 }}>
-                  +18% vs last month
+                  {md.missed.vsLast}
                 </div>
                 <div style={{ borderTop:"1px solid "+G.gray100, paddingTop:8 }}>
-                  <StatRow label="Parts reviewed" val="412"/>
-                  <StatRow label="Lines above best price" val="124"/>
-                  <StatRow label="Avg overspend per part" val="+$18"/>
-                  <StatRow label="Largest single overspend" val="$142"/>
+                  <StatRow label="Parts reviewed" val={md.parts.val}/>
+                  <StatRow label="Lines above best price" val={md.missed.lines}/>
+                  <StatRow label="Avg overspend per part" val={md.missed.avg}/>
+                  <StatRow label="Largest single overspend" val={"$"+md.missed.largest}/>
                 </div>
               </div>
               <div style={s.widgetFooter}>
@@ -387,7 +459,7 @@ function Dashboard() {
                 <TargetBar label="Avg Parts Basket" actual={834} target={500} unit="$" higherIsBetter={false}/>
               </div>
               <div style={s.widgetFooter}>
-                <span style={{ fontSize:11, color:G.gray500 }}>Based on insurer rules · APR 2026</span>
+                <span style={{ fontSize:11, color:G.gray500 }}>Based on insurer rules · {MONTHS[monthIdx]}</span>
                 <span style={{ fontSize:11, color:G.green, fontWeight:600, cursor:"pointer" }}>View Detail</span>
               </div>
             </div>
@@ -401,21 +473,21 @@ function Dashboard() {
               <div style={s.widgetBody}>
                 <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:8 }}>
                   <div>
-                    <div style={{ fontSize:24, fontWeight:700, color:G.amber, lineHeight:1 }}>$6,840</div>
+                    <div style={{ fontSize:24, fontWeight:700, color:G.amber, lineHeight:1 }}>{md.nla.cost}</div>
                     <div style={{ fontSize:10, color:G.gray600, marginTop:3 }}>total NLA cost</div>
                   </div>
                   <div>
-                    <div style={{ fontSize:24, fontWeight:700, color:G.amber, lineHeight:1 }}>23 days</div>
+                    <div style={{ fontSize:24, fontWeight:700, color:G.amber, lineHeight:1 }}>{md.nla.days} days</div>
                     <div style={{ fontSize:10, color:G.gray600, marginTop:3 }}>avg order delay</div>
                   </div>
                 </div>
                 <div style={{ display:"inline-flex", background:G.amberLight, color:G.amber, fontSize:10, fontWeight:700, padding:"2px 7px", borderRadius:2, marginBottom:10 }}>
-                  Avg delay up from 18 days last month
+                  {md.nla.vsLast}
                 </div>
                 <div style={{ borderTop:"1px solid "+G.gray100, paddingTop:8 }}>
-                  <StatRow label="Parts affected" val="23"/>
-                  <StatRow label="Jobs impacted" val="14"/>
-                  <StatRow label="Avg cost per NLA part" val="$297"/>
+                  <StatRow label="Parts affected" val={md.nla.parts}/>
+                  <StatRow label="Jobs impacted" val={md.nla.jobs}/>
+                  <StatRow label="Avg cost per NLA part" val={md.nla.avgCost}/>
                   <StatRow label="Most affected supplier" val="OEM Direct"/>
                 </div>
               </div>
