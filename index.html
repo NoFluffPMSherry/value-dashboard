@@ -184,7 +184,28 @@ function TrendTooltip({ data, color, name }) {
   );
 }
 
-function KpiCell({ icon, name, value, sub, trendVal, trendDir, trendNote, barData, last }) {
+function InfoTooltip({ text }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <span style={{ position:"relative", display:"inline-flex", alignItems:"center", marginLeft:4, verticalAlign:"middle" }}
+      onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}>
+      <span style={{ display:"inline-flex", alignItems:"center", justifyContent:"center",
+        width:13, height:13, borderRadius:"50%", border:"1.5px solid "+G.gray400,
+        fontSize:8, fontWeight:700, color:G.gray400, cursor:"default", lineHeight:1 }}>i</span>
+      {hov && (
+        <div style={{ position:"absolute", bottom:"calc(100% + 6px)", left:"50%", transform:"translateX(-50%)",
+          background:"#333", color:"#fff", fontSize:10, lineHeight:1.5, padding:"8px 10px", borderRadius:4,
+          zIndex:300, boxShadow:"0 4px 12px rgba(0,0,0,.2)", width:220, pointerEvents:"none" }}>
+          <div style={{ position:"absolute", top:"100%", left:"50%", transform:"translateX(-50%)", width:0, height:0,
+            borderLeft:"5px solid transparent", borderRight:"5px solid transparent", borderTop:"5px solid #333" }}/>
+          {text}
+        </div>
+      )}
+    </span>
+  );
+}
+
+function KpiCell({ icon, name, value, sub, trendVal, trendDir, trendNote, barData, last, infoTooltip }) {
   const [hov, setHov] = useState(false);
   const trendColor = trendDir==="up"?G.green:trendDir==="warn"?G.amber:trendDir==="down"?G.red:G.gray400;
   const arrow = trendDir==="down"?"▼":trendDir==="neutral"?"":"▲";
@@ -194,7 +215,9 @@ function KpiCell({ icon, name, value, sub, trendVal, trendDir, trendNote, barDat
       style={{ ...s.kpiCell, borderRight:last?"none":"1px solid "+G.gray100, background:hov?"#fafafa":"#fff" }}>
       {hov && barData && <TrendTooltip data={barData} color={barColor} name={name}/>}
       <div style={{ color:G.gray400, marginBottom:3 }}>{icon}</div>
-      <div style={{ fontSize:10, color:G.gray500, fontWeight:700, letterSpacing:.5, textTransform:"uppercase", marginBottom:3 }}>{name}</div>
+      <div style={{ fontSize:10, color:G.gray500, fontWeight:700, letterSpacing:.5, textTransform:"uppercase", marginBottom:3 }}>
+        {name}{infoTooltip && <InfoTooltip text={infoTooltip}/>}
+      </div>
       <div style={{ fontSize:20, fontWeight:700, color:trendDir==="warn"?G.amber:G.green, lineHeight:1.1 }}>{value}</div>
       <div style={{ fontSize:10, color:G.gray600, marginTop:2 }}>{sub}</div>
       <div style={{ fontSize:10, color:G.gray600, marginTop:4 }}>
@@ -384,7 +407,8 @@ function Dashboard() {
                 trendVal={md.profit.trend} trendDir={md.profit.dir} trendNote="margin vs last mo."
                 barData={md.profit.bar}/>
               <KpiCell icon={clockIcon} name="Hours Saved" value={isCurrent?"140 hrs":"—"} sub={isCurrent?"Quote and admin time saved":"Not available for past months"}
-                trendDir="neutral" trendNote="Estimated based on avg workflow" last/>
+                trendDir="up" trendVal="" trendNote="vs manual quote &amp; admin workflow" last
+                infoTooltip="Estimated based on avg time saved per quote sent and order placed, compared to a manual phone/email workflow. Actual savings vary by shop process."/>
             </div>
           </div>
 
