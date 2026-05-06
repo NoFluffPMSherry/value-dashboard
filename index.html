@@ -12,8 +12,6 @@
     --green-btn: #1B9B3B;
     --blue: #337ab7;
     --purple: #9b59b6;
-    --pink: #e91e8c;
-    --orange: #f0ad4e;
     --red: #C0392B;
     --amber: #E07A00;
     --gray-border: #ddd;
@@ -37,7 +35,7 @@
   /* MAIN NAV */
   .main-nav { display: flex; align-items: stretch; }
   .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 18px; cursor: pointer; color: #999; font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; border-bottom: 3px solid transparent; gap: 4px; text-decoration: none; margin-bottom: -2px; }
-  .nav-item.active { color: var(--green-dark); border-bottom: 3px solid transparent; }
+  .nav-item.active { color: var(--green-dark); }
   .nav-icon-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #e0e0e0; }
   .nav-item.active .nav-icon-circle { background: var(--green-dark); }
   .nav-icon-circle svg { width: 14px; height: 14px; fill: #fff; }
@@ -57,13 +55,21 @@
   .left-panel { width: 440px; min-width: 440px; flex-shrink: 0; background: #fff; border-right: 1px solid #e0e0e0; }
   .content-area { flex: 1; min-width: 0; padding: 14px 16px; background: #f5f5f5; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
 
-  /* LEFT PANEL ACTION ROWS */
+  /* LEFT PANEL */
   .action-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; border-bottom: 1px solid #eee; gap: 8px; }
   .action-row span { font-size: 12px; color: #444; flex: 1; }
   .action-row .controls { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
   .action-row input { border: 1px solid #ddd; border-radius: 2px; font-size: 11px; padding: 4px 7px; width: 88px; color: #555; outline: none; font-family: Arial, Helvetica, sans-serif; }
   .btn-green { background: var(--green-btn); color: #fff; border: none; border-radius: 2px; font-size: 10px; font-weight: 700; padding: 5px 11px; cursor: pointer; white-space: nowrap; letter-spacing: 0.3px; font-family: Arial, Helvetica, sans-serif; }
   .btn-green:hover { background: #168a33; }
+
+  /* DEMO BAR */
+  .demo-bar { background: #fff7e6; border: 1px solid #f0c060; border-radius: 4px; padding: 7px 14px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .demo-bar-label { font-size: 9px; font-weight: 700; color: #a07000; letter-spacing: 0.8px; text-transform: uppercase; white-space: nowrap; }
+  .demo-btns { display: flex; gap: 4px; }
+  .demo-btn { background: #fff; border: 1px solid #ddd; border-radius: 3px; font-size: 10px; font-weight: 700; padding: 4px 10px; cursor: pointer; color: #888; letter-spacing: 0.3px; font-family: Arial, Helvetica, sans-serif; transition: all .15s; }
+  .demo-btn:hover { border-color: var(--green-dark); color: var(--green-dark); }
+  .demo-btn.active { background: var(--green-dark); border-color: var(--green-dark); color: #fff; }
 
   /* MTD PANEL */
   .mtd-panel { background: #fff; border: 1px solid #e0e0e0; border-radius: 3px; overflow: visible; }
@@ -75,20 +81,20 @@
   .kpi-cell { padding: 10px 14px; border-right: 1px solid #eee; cursor: pointer; position: relative; overflow: visible; background: #fff; }
   .kpi-cell:last-child { border-right: none; }
   .kpi-cell:hover { background: #fafafa; }
+  .kpi-cell.toggle-active .tooltip { pointer-events: auto; }
   .kpi-icon { color: #bbb; margin-bottom: 4px; }
   .kpi-icon svg { width: 18px; height: 18px; fill: none; stroke: #bbb; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .kpi-name { font-size: 10px; color: #888; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; display: flex; align-items: center; }
   .kpi-value { font-size: 20px; font-weight: 700; color: var(--green-dark); line-height: 1.1; }
-  .kpi-value.warn { color: var(--amber); }
   .kpi-sub { font-size: 10px; color: #666; margin-top: 3px; }
   .kpi-trend { font-size: 10px; color: #666; margin-top: 5px; }
   .trend-up { color: var(--green-dark); font-weight: 700; }
   .trend-neutral { color: #aaa; font-style: italic; }
 
-  /* TOOLTIP */
+  /* SPARKLINE TOOLTIP */
   .tooltip { position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%);
     background: #fff; border: 1px solid #ddd; border-radius: 5px; padding: 10px 12px;
-    z-index: 200; box-shadow: 0 4px 18px rgba(0,0,0,.13); min-width: 164px; pointer-events: none; display: none; }
+    z-index: 200; box-shadow: 0 4px 18px rgba(0,0,0,.13); min-width: 130px; pointer-events: none; display: none; }
   .kpi-cell:hover .tooltip { display: block; }
   .tooltip-arrow { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); width: 0; height: 0;
     border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 5px solid #ddd; }
@@ -97,14 +103,17 @@
   .tooltip-title { font-size: 9px; color: #aaa; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
   .tooltip-footer { margin-top: 7px; padding-top: 7px; border-top: 1px solid #eee; font-size: 10px; color: #333; font-weight: 700; }
   .tooltip-footer span { font-size: 9px; color: #aaa; font-weight: 400; margin-left: 4px; }
+  .tooltip-toggle-btns { display: flex; gap: 4px; margin-bottom: 8px; }
+  .tt-btn { font-size: 8px; font-weight: 700; padding: 2px 8px; border-radius: 2px; cursor: pointer; font-family: Arial, Helvetica, sans-serif; border: 1px solid #ddd; background: #fff; color: #aaa; }
+  .tt-btn.active { border-color: var(--green-dark); background: var(--green-dark); color: #fff; }
 
-  /* MONTH NAVIGATION */
+  /* MONTH NAV */
   .mtd-nav { display: flex; align-items: center; gap: 6px; }
-  .mtd-nav-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; border-radius: 2px; font-size: 16px; font-weight: 700; width: 22px; height: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; }
+  .mtd-nav-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; border-radius: 2px; font-size: 16px; font-weight: 700; width: 22px; height: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
   .mtd-nav-btn:hover:not(:disabled) { background: rgba(255,255,255,0.3); }
   .mtd-nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
-  /* INFO TOOLTIP (hours saved) */
+  /* INFO TOOLTIP */
   .info-tooltip-wrap { position: relative; display: inline-flex; align-items: center; margin-left: 4px; }
   .info-tooltip-icon { display: inline-flex; align-items: center; justify-content: center; width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid #aaa; font-size: 8px; font-weight: 700; color: #aaa; cursor: default; line-height: 1; flex-shrink: 0; }
   .info-tooltip-bubble { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: #fff; color: #555; font-size: 10px; line-height: 1.6; padding: 9px 11px; border-radius: 4px; border: 1px solid #ddd; z-index: 300; box-shadow: 0 2px 10px rgba(0,0,0,.08); width: 215px; pointer-events: none; text-transform: none; letter-spacing: normal; font-weight: 400; white-space: normal; }
@@ -112,7 +121,7 @@
   .info-tooltip-bubble::before { content: ''; position: absolute; top: calc(100% - 1px); left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #fff; z-index: 1; }
   .info-tooltip-wrap:hover .info-tooltip-bubble { display: block; }
 
-  /* WIDGET ROW */
+  /* WIDGETS */
   .widget-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .widget { background: #fff; border: 1px solid #e0e0e0; border-radius: 3px; display: flex; flex-direction: column; }
   .widget-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-bottom: 1px solid #eee; flex-shrink: 0; }
@@ -122,19 +131,13 @@
   .widget-footer .meta { font-size: 11px; color: #888; }
   .widget-footer .link { font-size: 11px; color: var(--green-dark); font-weight: 600; cursor: pointer; text-decoration: none; }
   .widget-footer .link:hover { text-decoration: underline; }
-
-  /* BADGES */
   .badge { font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 2px; display: inline-block; }
   .badge-blue { background: #dbeafe; color: var(--blue); }
   .badge-red { background: #ffebee; color: var(--red); }
   .badge-amber { background: #fff8e1; color: var(--amber); }
-
-  /* STAT ROWS */
   .stat-row { display: flex; justify-content: space-between; font-size: 11px; padding: 5px 0; border-bottom: 1px solid #eee; }
   .stat-row .label { color: #666; }
   .stat-row .val { font-weight: 700; color: #333; }
-
-  /* TARGET BARS */
   .target-bar { margin-bottom: 8px; }
   .target-bar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
   .target-bar-header .name { font-size: 10px; color: #666; }
@@ -144,10 +147,8 @@
   .bar-track { position: relative; height: 6px; background: #eee; border-radius: 3px; }
   .bar-fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 3px; }
   .bar-marker { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #999; border-radius: 1px; transform: translateX(-50%); }
-
-  /* MIX BAR */
   .mix-bar { display: flex; height: 8px; border-radius: 2px; overflow: hidden; gap: 1px; margin: 4px 0; }
-  .mix-seg { height: 100%; transition: width 1s cubic-bezier(.4,0,.2,1); }
+  .mix-seg { height: 100%; }
   .mix-legend { display: flex; gap: 10px; margin-top: 5px; flex-wrap: wrap; }
   .mix-legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #666; }
   .mix-dot { width: 8px; height: 8px; border-radius: 1px; flex-shrink: 0; }
@@ -156,8 +157,6 @@
   .mix-detail-row .left { display: flex; align-items: center; gap: 6px; }
   .mix-detail-row .right { display: flex; gap: 12px; }
   .mix-detail-row .count { color: #888; font-size: 10px; }
-
-  /* MY PARTSCHECK DROPDOWN */
   .my-pc-wrap { position: relative; }
   .my-pc-toggle { cursor: pointer; color: #555; text-decoration: none; }
   .my-pc-toggle:hover { color: #1B9B3B; }
@@ -168,6 +167,44 @@
   .my-pc-dropdown a svg { width: 14px; height: 14px; fill: #999; flex-shrink: 0; }
   .my-pc-dropdown a:hover svg { fill: var(--green-dark); }
   .my-pc-sep { height: 1px; background: #eee; margin: 4px 0; }
+
+  /* WHAT'S NEW TRIGGER */
+  .wn-trigger { display:inline-flex; align-items:center; gap:4px; cursor:pointer; color:var(--green-dark); font-weight:800; font-size:10px; letter-spacing:0.4px; padding:2px 7px 2px 5px; border:1.5px solid var(--green-dark); border-radius:2px; transition:background .12s; user-select:none; }
+  .wn-trigger:hover { background:var(--green-dark); color:#fff; }
+  .wn-trigger:hover .wn-dot { background:#fff; animation:none; }
+  .wn-dot { width:6px; height:6px; border-radius:50%; background:var(--red); flex-shrink:0; animation:wnPulse 1.5s ease-in-out infinite; }
+  .wn-dot.hidden { display:none; }
+  @keyframes wnPulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+  /* WHAT'S NEW MODAL */
+  .wn-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,.48); z-index:1000; align-items:center; justify-content:center; }
+  .wn-backdrop.open { display:flex; }
+  .wn-modal { background:#fff; border-radius:6px; box-shadow:0 8px 40px rgba(0,0,0,.25); width:460px; max-width:96vw; max-height:88vh; display:flex; flex-direction:column; overflow:hidden; animation:wnSlideIn .18s ease; }
+  @keyframes wnSlideIn { from{opacity:0;transform:translateY(-12px) scale(0.97)} to{opacity:1;transform:none} }
+  .wn-header { background:var(--green-dark); color:#fff; padding:14px 18px 12px; display:flex; align-items:flex-start; justify-content:space-between; flex-shrink:0; }
+  .wn-header-left { display:flex; flex-direction:column; gap:2px; }
+  .wn-header-title { font-size:13px; font-weight:800; letter-spacing:0.3px; }
+  .wn-header-sub { font-size:10px; opacity:0.7; }
+  .wn-close { background:none; border:none; color:rgba(255,255,255,.65); font-size:20px; cursor:pointer; line-height:1; padding:0; margin-top:-2px; flex-shrink:0; }
+  .wn-close:hover { color:#fff; }
+  .wn-body { padding:18px 20px 4px; overflow-y:auto; flex:1; }
+  .wn-release-badge { display:inline-flex; align-items:center; gap:6px; margin-bottom:10px; }
+  .wn-version { background:var(--green-dark); color:#fff; font-size:10px; font-weight:800; padding:2px 8px; border-radius:2px; letter-spacing:0.5px; }
+  .wn-date { font-size:10px; color:#888; }
+  .wn-new-tag { background:#dc3545; color:#fff; font-size:8px; font-weight:800; padding:1px 5px; border-radius:2px; letter-spacing:0.5px; }
+  .wn-release-title { font-size:15px; font-weight:800; color:#222; margin-bottom:6px; line-height:1.3; }
+  .wn-release-desc { font-size:11px; color:#666; margin-bottom:14px; line-height:1.65; }
+  .wn-features { list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:16px; padding:0; }
+  .wn-features li { display:flex; align-items:flex-start; gap:10px; font-size:11px; color:#333; line-height:1.5; }
+  .wn-feat-icon { font-size:15px; flex-shrink:0; margin-top:0; line-height:1.4; }
+  .wn-divider { border:none; border-top:1px solid #eee; margin:16px 0 14px; }
+  .wn-prev-heading { font-size:9px; font-weight:700; color:#aaa; letter-spacing:0.7px; text-transform:uppercase; margin-bottom:10px; }
+  .wn-prev-list { display:flex; flex-direction:column; gap:5px; }
+  .wn-prev-item { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:3px; border:1px solid #eee; background:#fafafa; }
+  .wn-prev-version { background:#e8e8e8; color:#666; font-size:9px; font-weight:700; padding:1px 6px; border-radius:2px; flex-shrink:0; }
+  .wn-prev-title { font-size:11px; color:#444; font-weight:600; flex:1; }
+  .wn-prev-date { font-size:10px; color:#aaa; flex-shrink:0; }
+  .wn-footer { padding:12px 20px 16px; display:flex; justify-content:flex-end; border-top:1px solid #eee; flex-shrink:0; background:#fff; }
 </style>
 </head>
 <body>
@@ -198,40 +235,27 @@
       </svg>
     </a>
     <nav class="main-nav">
-      <a class="nav-item active" href="#">
-        <div class="nav-icon-circle"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg></div>DASHBOARD
-      </a>
-      <a class="nav-item" href="#">
-        <div class="nav-icon-circle gray"><svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></div>GET PRICE
-      </a>
-      <a class="nav-item" href="#">
-        <div class="nav-icon-circle gray"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>CHECK PRICE
-      </a>
-      <a class="nav-item" href="#">
-        <div class="nav-icon-circle gray"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>ORDERS
-      </a>
-      <a class="nav-item" href="#">
-        <div class="nav-icon-circle gray"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>CREDITS
-      </a>
+      <a class="nav-item active" href="#"><div class="nav-icon-circle"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg></div>DASHBOARD</a>
+      <a class="nav-item" href="#"><div class="nav-icon-circle gray"><svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></div>GET PRICE</a>
+      <a class="nav-item" href="#"><div class="nav-icon-circle gray"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>CHECK PRICE</a>
+      <a class="nav-item" href="#"><div class="nav-icon-circle gray"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>ORDERS</a>
+      <a class="nav-item" href="#"><div class="nav-icon-circle gray"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>CREDITS</a>
     </nav>
     <div class="top-right">
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
         <div class="top-links">
-          <div class="my-pc-wrap" style="display:inline-block">
+          <span class="wn-trigger" id="wnTrigger" onclick="openWhatNew()"><span class="wn-dot hidden" id="wnDot"></span>WHAT'S NEW</span>&nbsp;<span>|</span>&nbsp;<div class="my-pc-wrap" style="display:inline-block">
             <span class="my-pc-toggle"><span style="display:inline-flex;align-items:center;justify-content:center;background:var(--green-dark);color:#fff;font-size:9px;font-weight:800;width:20px;height:18px;border-radius:2px;vertical-align:middle;margin-right:4px">MJ</span>MY PARTSCHECK &#9662;</span>
             <div class="my-pc-dropdown">
-              <a href="#" onclick="alert('Opening support message form...');return false;"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>Message Support</a>
+              <a href="#"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>Message Support</a>
               <a href="#"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>Reports</a>
               <a href="#"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>Settings</a>
               <div class="my-pc-sep"></div>
-              <a href="#" onclick="alert('Downloading TeamViewer...');return false;"><svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/></svg>TeamViewer</a>
+              <a href="#"><svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/></svg>TeamViewer</a>
             </div>
           </div>&nbsp;<span>|</span>&nbsp;<a href="#">LOGOUT</a>
         </div>
-        <div class="search-wrap">
-          <input type="text" placeholder="Search"/>
-          <button>&#128269;</button>
-        </div>
+        <div class="search-wrap"><input type="text" placeholder="Search"/><button>&#128269;</button></div>
       </div>
     </div>
   </div>
@@ -264,117 +288,76 @@
           <span style="background:#dc3545;color:#fff;font-size:7px;font-weight:800;padding:1px 4px;border-radius:2px;letter-spacing:0.3px">NEW</span>
         </div>
         <div style="font-size:10px;color:#888;margin-bottom:8px">Invoices matched to orders automatically</div>
-        <button class="btn-green" onclick="alert('Activating Smart Receipting...\nYour hash ID will be collected and sent to support.')" style="font-size:9px;padding:4px 12px">ACTIVATE NOW</button>
+        <button class="btn-green" style="font-size:9px;padding:4px 12px">ACTIVATE NOW</button>
       </div>
     </div>
 
     <!-- CONTENT AREA -->
     <div class="content-area">
 
-      <!-- MONTH TO DATE -->
+      <!-- DEMO BAR -->
+      <div class="demo-bar">
+        <span class="demo-bar-label">&#9998; Demo: Trend view</span>
+        <div class="demo-btns">
+          <button class="demo-btn" id="demoBtnQtr" onclick="setTrendMode('qtr')">QTR (3-month rolling)</button>
+          <button class="demo-btn" id="demoBtnYtd" onclick="setTrendMode('ytd')">YTD (full year)</button>
+          <button class="demo-btn" id="demoBtnToggle" onclick="setTrendMode('toggle')">QTR / YTD toggle</button>
+        </div>
+      </div>
+
+      <!-- MTD PANEL -->
       <div class="mtd-panel">
         <div class="mtd-header">
           <span class="title">MONTH TO DATE IN NUMBERS</span>
           <div class="mtd-nav">
-            <button class="mtd-nav-btn" id="btnPrevMonth" disabled>&#8249;</button>
-            <span class="date-badge" id="mtdMonthBadge">APR 2026</span>
+            <button class="mtd-nav-btn" id="btnPrevMonth">&#8249;</button>
+            <span class="date-badge" id="mtdMonthBadge">DEC 2026</span>
             <button class="mtd-nav-btn" id="btnNextMonth" disabled>&#8250;</button>
           </div>
         </div>
-        <div class="mtd-subtitle" id="mtdSubtitle">A snapshot of how PartsCheck is powering your business this month</div>
+        <div class="mtd-subtitle" id="mtdSubtitle">A snapshot of how PartsCheck powered your business in DEC 2026</div>
         <div class="kpi-row">
+
           <!-- Quotes Sent -->
-          <div class="kpi-cell">
+          <div class="kpi-cell" id="cellQS">
             <div class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
             <div class="kpi-name">Quotes Sent</div>
-            <div class="kpi-value" id="kpiQuotesVal">34</div>
-            <div class="kpi-sub" id="kpiQuotesSub">286 parts requested</div>
-            <div class="kpi-trend" id="kpiQuotesTrend"><span class="trend-up">&#9650; +4%</span> vs same period last mo.</div>
-            <div class="tooltip">
-              <div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div>
-              <div class="tooltip-title">Quotes Sent - 4 month trend</div>
-              <svg width="140" height="44" viewBox="0 0 140 44" style="display:block;overflow:visible">
-                <defs><linearGradient id="gQS" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B9B3B" stop-opacity="0.15"/><stop offset="100%" stop-color="#1B9B3B" stop-opacity="0"/></linearGradient></defs>
-                <path d="M8,38 L49.3,26.9 L90.7,23.2 L124,6 L124,42 L8,42 Z" fill="url(#gQS)"/>
-                <polyline points="8,38 49.3,26.9 90.7,23.2 124,6" fill="none" stroke="#1B9B3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="8" cy="38" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="49.3" cy="26.9" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="90.7" cy="23.2" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="124" cy="6" r="3" fill="#1B9B3B" stroke="#1B9B3B" stroke-width="1.5"/>
-              </svg>
-              <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:#aaa"><span>Jan</span><span>Feb</span><span>Mar</span><span style="color:#1B9B3B;font-weight:700">Apr</span></div>
-              <div class="tooltip-footer">34<span>current</span></div>
-            </div>
+            <div class="kpi-value" id="kpiQuotesVal">50</div>
+            <div class="kpi-sub" id="kpiQuotesSub">418 parts requested</div>
+            <div class="kpi-trend" id="kpiQuotesTrend"><span class="trend-up">&#9650; +6%</span> vs same period last mo.</div>
+            <div class="tooltip" id="tooltipQS"><div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div><div class="tooltip-content"></div></div>
           </div>
+
           <!-- Orders Placed -->
-          <div class="kpi-cell">
+          <div class="kpi-cell" id="cellOP">
             <div class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
             <div class="kpi-name">Orders Placed</div>
-            <div class="kpi-value" id="kpiOrdersVal">22</div>
-            <div class="kpi-sub" id="kpiOrdersSub">187 parts ordered</div>
-            <div class="kpi-trend" id="kpiOrdersTrend"><span class="trend-up">&#9650; +8%</span> vs same period last mo.</div>
-            <div class="tooltip">
-              <div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div>
-              <div class="tooltip-title">Orders Placed - 4 month trend</div>
-              <svg width="140" height="44" viewBox="0 0 140 44" style="display:block;overflow:visible">
-                <defs><linearGradient id="gOP" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B9B3B" stop-opacity="0.15"/><stop offset="100%" stop-color="#1B9B3B" stop-opacity="0"/></linearGradient></defs>
-                <path d="M8,38 L49.3,24.7 L90.7,22.4 L124,6 L124,42 L8,42 Z" fill="url(#gOP)"/>
-                <polyline points="8,38 49.3,24.7 90.7,22.4 124,6" fill="none" stroke="#1B9B3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="8" cy="38" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="49.3" cy="24.7" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="90.7" cy="22.4" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="124" cy="6" r="3" fill="#1B9B3B" stroke="#1B9B3B" stroke-width="1.5"/>
-              </svg>
-              <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:#aaa"><span>Jan</span><span>Feb</span><span>Mar</span><span style="color:#1B9B3B;font-weight:700">Apr</span></div>
-              <div class="tooltip-footer">22<span>current</span></div>
-            </div>
+            <div class="kpi-value" id="kpiOrdersVal">34</div>
+            <div class="kpi-sub" id="kpiOrdersSub">287 parts ordered</div>
+            <div class="kpi-trend" id="kpiOrdersTrend"><span class="trend-up">&#9650; +6%</span> vs same period last mo.</div>
+            <div class="tooltip" id="tooltipOP"><div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div><div class="tooltip-content"></div></div>
           </div>
+
           <!-- Total Spend -->
-          <div class="kpi-cell">
+          <div class="kpi-cell" id="cellTS">
             <div class="kpi-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
             <div class="kpi-name">Total Spend</div>
-            <div class="kpi-value" id="kpiSpendVal">$18.6K</div>
-            <div class="kpi-sub" id="kpiSpendSub">$548 avg per job</div>
-            <div class="kpi-trend" id="kpiSpendTrend"><span class="trend-up">&#9650; +12%</span> vs same period last mo.</div>
-            <div class="tooltip">
-              <div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div>
-              <div class="tooltip-title">Total Spend - 4 month trend</div>
-              <svg width="140" height="44" viewBox="0 0 140 44" style="display:block;overflow:visible">
-                <defs><linearGradient id="gTS" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B9B3B" stop-opacity="0.15"/><stop offset="100%" stop-color="#1B9B3B" stop-opacity="0"/></linearGradient></defs>
-                <path d="M8,38 L49.3,31.5 L90.7,22 L124,6 L124,42 L8,42 Z" fill="url(#gTS)"/>
-                <polyline points="8,38 49.3,31.5 90.7,22 124,6" fill="none" stroke="#1B9B3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="8" cy="38" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="49.3" cy="31.5" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="90.7" cy="22" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="124" cy="6" r="3" fill="#1B9B3B" stroke="#1B9B3B" stroke-width="1.5"/>
-              </svg>
-              <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:#aaa"><span>Jan</span><span>Feb</span><span>Mar</span><span style="color:#1B9B3B;font-weight:700">Apr</span></div>
-              <div class="tooltip-footer">$18.6K<span>current</span></div>
-            </div>
+            <div class="kpi-value" id="kpiSpendVal">$32.1K</div>
+            <div class="kpi-sub" id="kpiSpendSub">$621 avg per job</div>
+            <div class="kpi-trend" id="kpiSpendTrend"><span class="trend-up">&#9650; +9%</span> vs same period last mo.</div>
+            <div class="tooltip" id="tooltipTS"><div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div><div class="tooltip-content"></div></div>
           </div>
+
           <!-- Parts Profit -->
-          <div class="kpi-cell">
+          <div class="kpi-cell" id="cellPP">
             <div class="kpi-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
             <div class="kpi-name">Parts Profit</div>
-            <div class="kpi-value" id="kpiProfitVal">$4.2K</div>
-            <div class="kpi-sub" id="kpiProfitSub">22.6% margin</div>
-            <div class="kpi-trend" id="kpiProfitTrend"><span class="trend-up">&#9650; +1.2pts</span> margin vs last mo.</div>
-            <div class="tooltip">
-              <div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div>
-              <div class="tooltip-title">Parts Profit - 4 month trend</div>
-              <svg width="140" height="44" viewBox="0 0 140 44" style="display:block;overflow:visible">
-                <defs><linearGradient id="gPP" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B9B3B" stop-opacity="0.15"/><stop offset="100%" stop-color="#1B9B3B" stop-opacity="0"/></linearGradient></defs>
-                <path d="M8,38 L49.3,25 L90.7,14 L124,6 L124,42 L8,42 Z" fill="url(#gPP)"/>
-                <polyline points="8,38 49.3,25 90.7,14 124,6" fill="none" stroke="#1B9B3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="8" cy="38" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="49.3" cy="25" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="90.7" cy="14" r="2" fill="#fff" stroke="#1B9B3B" stroke-width="1.5"/>
-                <circle cx="124" cy="6" r="3" fill="#1B9B3B" stroke="#1B9B3B" stroke-width="1.5"/>
-              </svg>
-              <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:#aaa"><span>Jan</span><span>Feb</span><span>Mar</span><span style="color:#1B9B3B;font-weight:700">Apr</span></div>
-              <div class="tooltip-footer">$4.2K<span>current</span></div>
-            </div>
+            <div class="kpi-value" id="kpiProfitVal">$7.8K</div>
+            <div class="kpi-sub" id="kpiProfitSub">24.3% margin</div>
+            <div class="kpi-trend" id="kpiProfitTrend"><span class="trend-up">&#9650; +1.0pts</span> margin vs last mo.</div>
+            <div class="tooltip" id="tooltipPP"><div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div><div class="tooltip-content"></div></div>
           </div>
+
           <!-- Hours Saved -->
           <div class="kpi-cell" style="border-right:none">
             <div class="kpi-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
@@ -384,22 +367,19 @@
                 <span class="info-tooltip-bubble">Estimated based on avg time saved per quote sent and order placed, compared to a manual phone/email workflow. Actual savings vary by shop process.</span>
               </span>
             </div>
-            <div class="kpi-value" id="kpiHoursVal">38 hrs</div>
+            <div class="kpi-value" id="kpiHoursVal">58 hrs</div>
             <div class="kpi-sub">Quote and admin time saved</div>
             <div class="kpi-trend"><span class="trend-neutral">vs manual quote &amp; admin workflow</span></div>
           </div>
+
         </div>
       </div>
 
       <!-- WIDGETS -->
       <div class="widget-row">
 
-        <!-- Part Type Mix -->
         <div class="widget">
-          <div class="widget-head">
-            <span class="title">PART TYPE MIX</span>
-            <span class="badge badge-blue" id="mixMonthBadge">APR 2026</span>
-          </div>
+          <div class="widget-head"><span class="title">PART TYPE MIX</span><span class="badge badge-blue" id="mixMonthBadge">DEC 2026</span></div>
           <div class="widget-body">
             <div class="mix-bar">
               <div class="mix-seg" style="width:52%;background:#337ab7;border-radius:2px 0 0 2px"></div>
@@ -412,195 +392,297 @@
               <div class="mix-legend-item"><div class="mix-dot" style="background:#7DC21E"></div>Used <strong style="color:#7DC21E">17%</strong></div>
             </div>
             <div class="mix-detail">
-              <div class="mix-detail-row"><div class="left"><div class="mix-dot" style="background:#337ab7"></div><span style="color:#666">OEM</span></div><div class="right"><span class="count">214 parts</span><span style="font-weight:700;color:#337ab7;min-width:28px;text-align:right">52%</span></div></div>
-              <div class="mix-detail-row"><div class="left"><div class="mix-dot" style="background:#9b59b6"></div><span style="color:#666">Aftermarket</span></div><div class="right"><span class="count">128 parts</span><span style="font-weight:700;color:#9b59b6;min-width:28px;text-align:right">31%</span></div></div>
-              <div class="mix-detail-row"><div class="left"><div class="mix-dot" style="background:#7DC21E"></div><span style="color:#666">Used</span></div><div class="right"><span class="count">70 parts</span><span style="font-weight:700;color:#7DC21E;min-width:28px;text-align:right">17%</span></div></div>
+              <div class="mix-detail-row"><div class="left"><div class="mix-dot" style="background:#337ab7"></div><span style="color:#666">OEM</span></div><div class="right"><span class="count">260 parts</span><span style="font-weight:700;color:#337ab7;min-width:28px;text-align:right">52%</span></div></div>
+              <div class="mix-detail-row"><div class="left"><div class="mix-dot" style="background:#9b59b6"></div><span style="color:#666">Aftermarket</span></div><div class="right"><span class="count">155 parts</span><span style="font-weight:700;color:#9b59b6;min-width:28px;text-align:right">31%</span></div></div>
+              <div class="mix-detail-row"><div class="left"><div class="mix-dot" style="background:#7DC21E"></div><span style="color:#666">Used</span></div><div class="right"><span class="count">85 parts</span><span style="font-weight:700;color:#7DC21E;min-width:28px;text-align:right">17%</span></div></div>
             </div>
           </div>
-          <div class="widget-footer"><span class="meta">412 parts ordered this month</span><a class="link" href="#">View Detail</a></div>
+          <div class="widget-footer"><span class="meta" id="mixFooter">500 parts ordered this month</span><a class="link" href="#">View Detail</a></div>
         </div>
 
-        <!-- Missed Savings -->
         <div class="widget">
-          <div class="widget-head">
-            <span class="title">MISSED SAVINGS</span>
-            <span class="badge badge-red">UP THIS MONTH</span>
-          </div>
+          <div class="widget-head"><span class="title">MISSED SAVINGS</span><span class="badge badge-red">UP THIS MONTH</span></div>
           <div class="widget-body">
-            <div style="font-size:24px;font-weight:700;color:var(--red);line-height:1">$4,320</div>
+            <div style="font-size:24px;font-weight:700;color:var(--red);line-height:1">$6,840</div>
             <div style="font-size:10px;color:#666;margin-top:3px;margin-bottom:8px">above best available price this month</div>
-            <div style="display:inline-block;background:#ffebee;color:var(--red);font-size:10px;font-weight:700;padding:2px 7px;border-radius:2px;margin-bottom:10px">+18% vs last month</div>
+            <div style="display:inline-block;background:#ffebee;color:var(--red);font-size:10px;font-weight:700;padding:2px 7px;border-radius:2px;margin-bottom:10px">+12% vs last month</div>
             <div style="border-top:1px solid #eee;padding-top:8px">
-              <div class="stat-row"><span class="label">Parts reviewed</span><span class="val">412</span></div>
-              <div class="stat-row"><span class="label">Lines above best price</span><span class="val">124</span></div>
-              <div class="stat-row"><span class="label">Avg overspend per part</span><span class="val">+$18</span></div>
-              <div class="stat-row"><span class="label">Largest single overspend</span><span class="val">$142</span></div>
+              <div class="stat-row"><span class="label">Parts reviewed</span><span class="val">500</span></div>
+              <div class="stat-row"><span class="label">Lines above best price</span><span class="val">168</span></div>
+              <div class="stat-row"><span class="label">Avg overspend per part</span><span class="val">+$22</span></div>
+              <div class="stat-row"><span class="label">Largest single overspend</span><span class="val">$198</span></div>
             </div>
           </div>
           <div class="widget-footer"><span class="meta">Opportunity to reduce parts spend</span><a class="link" href="#">Review selections</a></div>
         </div>
 
-        <!-- Insurer Compliance -->
         <div class="widget">
-          <div class="widget-head">
-            <span class="title">INSURER COMPLIANCE</span>
-            <span class="badge badge-red">3 OFF TARGET</span>
-          </div>
-          <div class="widget-body" id="complianceBody">
-          </div>
-          <div class="widget-footer"><span class="meta">Based on insurer rules &middot; <span id="complianceMonth">APR 2026</span></span><a class="link" href="#">View Detail</a></div>
+          <div class="widget-head"><span class="title">INSURER COMPLIANCE</span><span class="badge badge-red">3 OFF TARGET</span></div>
+          <div class="widget-body" id="complianceBody"></div>
+          <div class="widget-footer"><span class="meta">Based on insurer rules &middot; <span id="complianceMonth">DEC 2026</span></span><a class="link" href="#">View Detail</a></div>
         </div>
 
-        <!-- NLA -->
         <div class="widget">
-          <div class="widget-head">
-            <span class="title">NO LONGER AVAILABLE (NLA)</span>
-            <span class="badge badge-amber">UP THIS MONTH</span>
-          </div>
+          <div class="widget-head"><span class="title">NO LONGER AVAILABLE (NLA)</span><span class="badge badge-amber">UP THIS MONTH</span></div>
           <div class="widget-body">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
-              <div>
-                <div style="font-size:24px;font-weight:700;color:var(--amber);line-height:1">$6,840</div>
-                <div style="font-size:10px;color:#666;margin-top:3px">total NLA cost</div>
-              </div>
-              <div>
-                <div style="font-size:24px;font-weight:700;color:var(--amber);line-height:1">23 days</div>
-                <div style="font-size:10px;color:#666;margin-top:3px">avg order delay</div>
-              </div>
+              <div><div style="font-size:24px;font-weight:700;color:var(--amber);line-height:1">$9,420</div><div style="font-size:10px;color:#666;margin-top:3px">total NLA cost</div></div>
+              <div><div style="font-size:24px;font-weight:700;color:var(--amber);line-height:1">26 days</div><div style="font-size:10px;color:#666;margin-top:3px">avg order delay</div></div>
             </div>
-            <div style="display:inline-block;background:#fff8e1;color:var(--amber);font-size:10px;font-weight:700;padding:2px 7px;border-radius:2px;margin-bottom:10px">Avg delay up from 18 days last month</div>
+            <div style="display:inline-block;background:#fff8e1;color:var(--amber);font-size:10px;font-weight:700;padding:2px 7px;border-radius:2px;margin-bottom:10px">Avg delay up from 24 days last month</div>
             <div style="border-top:1px solid #eee;padding-top:8px">
-              <div class="stat-row"><span class="label">Parts affected</span><span class="val">23</span></div>
-              <div class="stat-row"><span class="label">Jobs impacted</span><span class="val">14</span></div>
-              <div class="stat-row"><span class="label">Avg cost per NLA part</span><span class="val">$297</span></div>
+              <div class="stat-row"><span class="label">Parts affected</span><span class="val">31</span></div>
+              <div class="stat-row"><span class="label">Jobs impacted</span><span class="val">19</span></div>
+              <div class="stat-row"><span class="label">Avg cost per NLA part</span><span class="val">$304</span></div>
               <div class="stat-row"><span class="label">Most affected supplier</span><span class="val">OEM Direct</span></div>
             </div>
           </div>
           <div class="widget-footer"><span class="meta">NLA parts causing job delays</span><a class="link" href="#">View Detail</a></div>
         </div>
 
-      </div><!-- /widget-row -->
+      </div>
+    </div>
+  </div>
 
-    </div><!-- /content-area -->
-  </div><!-- /main-layout -->
-</div><!-- /page -->
+  <!-- WHAT'S NEW MODAL -->
+  <div class="wn-backdrop" id="wnBackdrop" onclick="handleBackdropClick(event)">
+    <div class="wn-modal" id="wnModal">
+      <div class="wn-header">
+        <div class="wn-header-left">
+          <span class="wn-header-title">What's New in PartsCheck</span>
+          <span class="wn-header-sub">Latest updates to your dashboard</span>
+        </div>
+        <button class="wn-close" onclick="closeWhatNew()">&#215;</button>
+      </div>
+      <div class="wn-body" id="wnBody"></div>
+      <div class="wn-footer">
+        <button class="btn-green" onclick="closeWhatNew()">Got it &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+</div>
 
 <script>
-  // Sub-nav tab switching
-  document.querySelectorAll('.sub-item').forEach(item => {
-    item.addEventListener('click', function() {
-      document.querySelectorAll('.sub-item').forEach(i => i.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
+  // ── Data ──────────────────────────────────────────────────────────────────
+  const MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-  // Render target bars for Insurer Compliance
-  (function() {
-    const bars = [
-      { label: "OEM Mix", actual: 52, target: 65, unit: "%", higherIsBetter: true },
-      { label: "OEM Discount", actual: 28.5, target: 32, unit: "%", higherIsBetter: true },
-      { label: "Parallel Mix", actual: 17, target: 26, unit: "%", higherIsBetter: true },
-      { label: "Aftermarket Mix", actual: 31, target: 5, unit: "%", higherIsBetter: false },
-      { label: "Avg Parts Basket", actual: 834, target: 500, unit: "$", higherIsBetter: false },
-    ];
-    const container = document.getElementById('complianceBody');
-    bars.forEach(b => {
-      const isGood = b.higherIsBetter ? b.actual >= b.target : b.actual <= b.target;
-      const isWarn = b.higherIsBetter ? (b.actual >= b.target * 0.85 && b.actual < b.target) : (b.actual <= b.target * 1.25 && b.actual > b.target);
-      const color = isGood ? 'var(--green-dark)' : isWarn ? 'var(--orange)' : 'var(--red)';
-      const max = Math.max(b.actual, b.target) * (b.higherIsBetter ? 1.15 : 1.3);
-      const aPct = Math.min((b.actual / max) * 100, 100);
-      const tPct = Math.min((b.target / max) * 100, 100);
-      const fmt = v => b.unit === "$" ? "$" + v.toLocaleString() : v + "%";
-      const div = document.createElement('div');
-      div.className = 'target-bar';
-      div.innerHTML = `
-        <div class="target-bar-header">
-          <span class="name">${b.label}</span>
-          <div class="values">
-            <span class="actual" style="color:${color}">${fmt(b.actual)}</span>
-            <span class="target">target ${fmt(b.target)}</span>
-          </div>
-        </div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:${aPct}%;background:${color}"></div>
-          <div class="bar-marker" style="left:${tPct}%"></div>
-        </div>`;
-      container.appendChild(div);
-    });
-  })();
-
-  // Month navigation
   const MONTHS_DATA = [
-    {
-      label: 'JAN 2026',
-      subtitle: 'A snapshot of how PartsCheck powered your business in JAN 2026',
-      quotes: { val: '29', sub: '241 parts requested', trend: '&#9650; +2%' },
-      orders: { val: '18', sub: '152 parts ordered', trend: '&#9650; +3%' },
-      spend:  { val: '$13.8K', sub: '$498 avg per job', trend: '&#9650; +3%' },
-      profit: { val: '$2.9K', sub: '21.0% margin', trend: '&#9650; +0.5pts' },
-      hours:  '28 hrs',
-    },
-    {
-      label: 'FEB 2026',
-      subtitle: 'A snapshot of how PartsCheck powered your business in FEB 2026',
-      quotes: { val: '31', sub: '260 parts requested', trend: '&#9650; +7%' },
-      orders: { val: '20', sub: '169 parts ordered', trend: '&#9650; +11%' },
-      spend:  { val: '$15.2K', sub: '$516 avg per job', trend: '&#9650; +10%' },
-      profit: { val: '$3.2K', sub: '21.1% margin', trend: '&#9650; +0.1pts' },
-      hours:  '31 hrs',
-    },
-    {
-      label: 'MAR 2026',
-      subtitle: 'A snapshot of how PartsCheck powered your business in MAR 2026',
-      quotes: { val: '33', sub: '273 parts requested', trend: '&#9650; +6%' },
-      orders: { val: '21', sub: '178 parts ordered', trend: '&#9650; +5%' },
-      spend:  { val: '$16.6K', sub: '$531 avg per job', trend: '&#9650; +9%' },
-      profit: { val: '$3.6K', sub: '21.7% margin', trend: '&#9650; +0.6pts' },
-      hours:  '34 hrs',
-    },
-    {
-      label: 'APR 2026',
-      subtitle: 'A snapshot of how PartsCheck is powering your business this month',
-      quotes: { val: '34', sub: '286 parts requested', trend: '&#9650; +4%' },
-      orders: { val: '22', sub: '187 parts ordered', trend: '&#9650; +8%' },
-      spend:  { val: '$18.6K', sub: '$548 avg per job', trend: '&#9650; +12%' },
-      profit: { val: '$4.2K', sub: '22.6% margin', trend: '&#9650; +1.2pts' },
-      hours:  '38 hrs',
-    },
+    { label:'JAN 2026', subtitle:'A snapshot of how PartsCheck powered your business in JAN 2026',
+      quotes:{ val:'29', sub:'241 parts requested', trend:'&#9650; +2%', raw:29 },
+      orders:{ val:'18', sub:'152 parts ordered',   trend:'&#9650; +3%', raw:18 },
+      spend: { val:'$13.8K', sub:'$498 avg per job',trend:'&#9650; +3%', raw:13.8 },
+      profit:{ val:'$2.9K', sub:'21.0% margin',     trend:'&#9650; +0.5pts', raw:2.9 },
+      hours:'28 hrs' },
+    { label:'FEB 2026', subtitle:'A snapshot of how PartsCheck powered your business in FEB 2026',
+      quotes:{ val:'31', sub:'260 parts requested', trend:'&#9650; +7%', raw:31 },
+      orders:{ val:'20', sub:'169 parts ordered',   trend:'&#9650; +11%', raw:20 },
+      spend: { val:'$15.2K', sub:'$516 avg per job',trend:'&#9650; +10%', raw:15.2 },
+      profit:{ val:'$3.2K', sub:'21.1% margin',     trend:'&#9650; +0.1pts', raw:3.2 },
+      hours:'31 hrs' },
+    { label:'MAR 2026', subtitle:'A snapshot of how PartsCheck powered your business in MAR 2026',
+      quotes:{ val:'33', sub:'273 parts requested', trend:'&#9650; +6%', raw:33 },
+      orders:{ val:'21', sub:'178 parts ordered',   trend:'&#9650; +5%', raw:21 },
+      spend: { val:'$16.6K', sub:'$531 avg per job',trend:'&#9650; +9%', raw:16.6 },
+      profit:{ val:'$3.6K', sub:'21.7% margin',     trend:'&#9650; +0.6pts', raw:3.6 },
+      hours:'34 hrs' },
+    { label:'APR 2026', subtitle:'A snapshot of how PartsCheck powered your business in APR 2026',
+      quotes:{ val:'34', sub:'286 parts requested', trend:'&#9650; +4%', raw:34 },
+      orders:{ val:'22', sub:'187 parts ordered',   trend:'&#9650; +5%', raw:22 },
+      spend: { val:'$18.6K', sub:'$548 avg per job',trend:'&#9650; +12%', raw:18.6 },
+      profit:{ val:'$4.2K', sub:'22.6% margin',     trend:'&#9650; +1.2pts', raw:4.2 },
+      hours:'38 hrs' },
+    { label:'MAY 2026', subtitle:'A snapshot of how PartsCheck powered your business in MAY 2026',
+      quotes:{ val:'36', sub:'301 parts requested', trend:'&#9650; +6%', raw:36 },
+      orders:{ val:'24', sub:'203 parts ordered',   trend:'&#9650; +9%', raw:24 },
+      spend: { val:'$20.1K', sub:'$563 avg per job',trend:'&#9650; +8%', raw:20.1 },
+      profit:{ val:'$4.6K', sub:'22.9% margin',     trend:'&#9650; +0.3pts', raw:4.6 },
+      hours:'41 hrs' },
+    { label:'JUN 2026', subtitle:'A snapshot of how PartsCheck powered your business in JUN 2026',
+      quotes:{ val:'38', sub:'318 parts requested', trend:'&#9650; +6%', raw:38 },
+      orders:{ val:'25', sub:'213 parts ordered',   trend:'&#9650; +4%', raw:25 },
+      spend: { val:'$21.8K', sub:'$579 avg per job',trend:'&#9650; +8%', raw:21.8 },
+      profit:{ val:'$5.0K', sub:'22.9% margin',     trend:'&#9650; +0.0pts', raw:5.0 },
+      hours:'43 hrs' },
+    { label:'JUL 2026', subtitle:'A snapshot of how PartsCheck powered your business in JUL 2026',
+      quotes:{ val:'39', sub:'326 parts requested', trend:'&#9650; +3%', raw:39 },
+      orders:{ val:'26', sub:'221 parts ordered',   trend:'&#9650; +4%', raw:26 },
+      spend: { val:'$22.5K', sub:'$587 avg per job',trend:'&#9650; +3%', raw:22.5 },
+      profit:{ val:'$5.3K', sub:'23.6% margin',     trend:'&#9650; +0.7pts', raw:5.3 },
+      hours:'45 hrs' },
+    { label:'AUG 2026', subtitle:'A snapshot of how PartsCheck powered your business in AUG 2026',
+      quotes:{ val:'41', sub:'344 parts requested', trend:'&#9650; +5%', raw:41 },
+      orders:{ val:'27', sub:'230 parts ordered',   trend:'&#9650; +4%', raw:27 },
+      spend: { val:'$24.2K', sub:'$600 avg per job',trend:'&#9650; +8%', raw:24.2 },
+      profit:{ val:'$5.7K', sub:'23.6% margin',     trend:'&#9650; +0.0pts', raw:5.7 },
+      hours:'47 hrs' },
+    { label:'SEP 2026', subtitle:'A snapshot of how PartsCheck powered your business in SEP 2026',
+      quotes:{ val:'43', sub:'360 parts requested', trend:'&#9650; +5%', raw:43 },
+      orders:{ val:'29', sub:'246 parts ordered',   trend:'&#9650; +7%', raw:29 },
+      spend: { val:'$26.0K', sub:'$607 avg per job',trend:'&#9650; +7%', raw:26.0 },
+      profit:{ val:'$6.2K', sub:'23.8% margin',     trend:'&#9650; +0.2pts', raw:6.2 },
+      hours:'50 hrs' },
+    { label:'OCT 2026', subtitle:'A snapshot of how PartsCheck powered your business in OCT 2026',
+      quotes:{ val:'45', sub:'377 parts requested', trend:'&#9650; +5%', raw:45 },
+      orders:{ val:'31', sub:'263 parts ordered',   trend:'&#9650; +7%', raw:31 },
+      spend: { val:'$27.8K', sub:'$611 avg per job',trend:'&#9650; +7%', raw:27.8 },
+      profit:{ val:'$6.7K', sub:'24.1% margin',     trend:'&#9650; +0.3pts', raw:6.7 },
+      hours:'52 hrs' },
+    { label:'NOV 2026', subtitle:'A snapshot of how PartsCheck powered your business in NOV 2026',
+      quotes:{ val:'47', sub:'395 parts requested', trend:'&#9650; +4%', raw:47 },
+      orders:{ val:'32', sub:'272 parts ordered',   trend:'&#9650; +3%', raw:32 },
+      spend: { val:'$29.5K', sub:'$615 avg per job',trend:'&#9650; +6%', raw:29.5 },
+      profit:{ val:'$7.1K', sub:'24.1% margin',     trend:'&#9650; +0.0pts', raw:7.1 },
+      hours:'55 hrs' },
+    { label:'DEC 2026', subtitle:'A snapshot of how PartsCheck powered your business in DEC 2026',
+      quotes:{ val:'50', sub:'418 parts requested', trend:'&#9650; +6%', raw:50 },
+      orders:{ val:'34', sub:'287 parts ordered',   trend:'&#9650; +6%', raw:34 },
+      spend: { val:'$32.1K', sub:'$621 avg per job',trend:'&#9650; +9%', raw:32.1 },
+      profit:{ val:'$7.8K', sub:'24.3% margin',     trend:'&#9650; +0.8pts', raw:7.8 },
+      hours:'58 hrs' },
   ];
 
-  let currentMonthIdx = 3;
+  // ── State ─────────────────────────────────────────────────────────────────
+  let currentMonthIdx = 11;
+  let trendMode = 'qtr';
+  let tooltipInnerMode = 'qtr';
 
+  // ── Sparkline ─────────────────────────────────────────────────────────────
+  function getSlice(kpiKey, idx, innerMode) {
+    const start = innerMode === 'ytd' ? 0 : Math.max(0, idx - 2);
+    return MONTHS_DATA.slice(start, idx + 1).map((m, i) => ({
+      value: m[kpiKey].raw,
+      label: MO[start + i]
+    }));
+  }
+
+  function buildSparkSVG(pts, color, gradId) {
+    const n = pts.length;
+    const values = pts.map(p => p.value);
+    const labels = pts.map(p => p.label);
+    const svgW = n <= 3 ? 110 : n <= 6 ? 140 : 170;
+    const H = 44, pX = 10, pY = 6;
+    const minV = Math.min(...values), maxV = Math.max(...values);
+    const range = maxV - minV || maxV * 0.1 || 1;
+
+    const coords = values.map((v, i) => {
+      const x = n === 1 ? svgW / 2 : (pX + (i / (n - 1)) * (svgW - pX * 2));
+      const y = pY + (1 - (v - minV) / range) * (H - pY * 2);
+      return { x: +x.toFixed(1), y: +y.toFixed(1), label: labels[i], last: i === n - 1 };
+    });
+
+    const ptsStr = coords.map(c => c.x + ',' + c.y).join(' ');
+    const f = coords[0], l = coords[coords.length - 1];
+    const areaD = 'M' + f.x + ',' + f.y + ' ' +
+      coords.slice(1).map(c => 'L' + c.x + ',' + c.y).join(' ') +
+      ' L' + l.x + ',' + (H - pY + 4) + ' L' + f.x + ',' + (H - pY + 4) + ' Z';
+
+    const fs = n > 8 ? 7 : 8;
+    const showLbl = i => n <= 6 || i === 0 || i % 3 === 0 || i === n - 1;
+
+    const dots = coords.map(c =>
+      '<circle cx="' + c.x + '" cy="' + c.y + '" r="' + (c.last ? 3 : 1.8) + '" fill="' + (c.last ? color : '#fff') + '" stroke="' + color + '" stroke-width="1.5"/>'
+    ).join('');
+
+    const lbls = coords.map((c, i) => showLbl(i)
+      ? '<text x="' + c.x + '" y="' + (H + 11) + '" text-anchor="middle" font-size="' + fs + '" fill="' + (c.last ? color : '#aaa') + '" font-weight="' + (c.last ? 700 : 400) + '" font-family="Arial,sans-serif">' + c.label + '</text>'
+      : ''
+    ).join('');
+
+    return '<svg width="' + svgW + '" height="' + (H + 16) + '" viewBox="0 0 ' + svgW + ' ' + (H + 16) + '" style="display:block;overflow:visible">' +
+      '<defs><linearGradient id="' + gradId + '" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="' + color + '" stop-opacity="0.15"/>' +
+      '<stop offset="100%" stop-color="' + color + '" stop-opacity="0"/>' +
+      '</linearGradient></defs>' +
+      '<path d="' + areaD + '" fill="url(#' + gradId + ')"/>' +
+      '<polyline points="' + ptsStr + '" fill="none" stroke="' + color + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' +
+      dots + lbls + '</svg>';
+  }
+
+  function buildTooltipContent(kpiName, kpiKey, displayVal, color, gradId) {
+    const innerMode = trendMode === 'toggle' ? tooltipInnerMode : trendMode;
+    const slice = getSlice(kpiKey, currentMonthIdx, innerMode);
+    const suffix = innerMode === 'ytd' ? 'YEAR TO DATE' : 'QTR TREND';
+
+    let html = '';
+    if (trendMode === 'toggle') {
+      html += '<div class="tooltip-toggle-btns">' +
+        '<button class="tt-btn ' + (tooltipInnerMode === 'qtr' ? 'active' : '') + '" onclick="setTooltipInnerMode(\'qtr\')">QTR</button>' +
+        '<button class="tt-btn ' + (tooltipInnerMode === 'ytd' ? 'active' : '') + '" onclick="setTooltipInnerMode(\'ytd\')">YTD</button>' +
+        '</div>';
+    }
+    html += '<div class="tooltip-title">' + kpiName + ' \u2013 ' + suffix + '</div>';
+    html += buildSparkSVG(slice, color, gradId);
+    html += '<div class="tooltip-footer">' + displayVal + '<span>current</span></div>';
+    return html;
+  }
+
+  // ── Dashboard update ──────────────────────────────────────────────────────
   function updateDashboard(idx) {
     const m = MONTHS_DATA[idx];
+
+    // KPI values
+    document.getElementById('kpiQuotesVal').textContent = m.quotes.val;
+    document.getElementById('kpiQuotesSub').textContent = m.quotes.sub;
+    document.getElementById('kpiQuotesTrend').innerHTML = '<span class="trend-up">' + m.quotes.trend + '</span> vs same period last mo.';
+    document.getElementById('kpiOrdersVal').textContent = m.orders.val;
+    document.getElementById('kpiOrdersSub').textContent = m.orders.sub;
+    document.getElementById('kpiOrdersTrend').innerHTML = '<span class="trend-up">' + m.orders.trend + '</span> vs same period last mo.';
+    document.getElementById('kpiSpendVal').textContent = m.spend.val;
+    document.getElementById('kpiSpendSub').textContent = m.spend.sub;
+    document.getElementById('kpiSpendTrend').innerHTML = '<span class="trend-up">' + m.spend.trend + '</span> vs same period last mo.';
+    document.getElementById('kpiProfitVal').textContent = m.profit.val;
+    document.getElementById('kpiProfitSub').textContent = m.profit.sub;
+    document.getElementById('kpiProfitTrend').innerHTML = '<span class="trend-up">' + m.profit.trend + '</span> margin vs last mo.';
+    document.getElementById('kpiHoursVal').textContent = m.hours;
+
+    // Header
     document.getElementById('mtdMonthBadge').textContent = m.label;
     document.getElementById('mtdSubtitle').textContent = m.subtitle;
     document.getElementById('mixMonthBadge').textContent = m.label;
     document.getElementById('complianceMonth').textContent = m.label;
 
-    document.getElementById('kpiQuotesVal').textContent = m.quotes.val;
-    document.getElementById('kpiQuotesSub').textContent = m.quotes.sub;
-    document.getElementById('kpiQuotesTrend').innerHTML = '<span class="trend-up">' + m.quotes.trend + '</span> vs same period last mo.';
-
-    document.getElementById('kpiOrdersVal').textContent = m.orders.val;
-    document.getElementById('kpiOrdersSub').textContent = m.orders.sub;
-    document.getElementById('kpiOrdersTrend').innerHTML = '<span class="trend-up">' + m.orders.trend + '</span> vs same period last mo.';
-
-    document.getElementById('kpiSpendVal').textContent = m.spend.val;
-    document.getElementById('kpiSpendSub').textContent = m.spend.sub;
-    document.getElementById('kpiSpendTrend').innerHTML = '<span class="trend-up">' + m.spend.trend + '</span> vs same period last mo.';
-
-    document.getElementById('kpiProfitVal').textContent = m.profit.val;
-    document.getElementById('kpiProfitSub').textContent = m.profit.sub;
-    document.getElementById('kpiProfitTrend').innerHTML = '<span class="trend-up">' + m.profit.trend + '</span> margin vs last mo.';
-
-    document.getElementById('kpiHoursVal').textContent = m.hours;
-
+    // Nav buttons
     document.getElementById('btnPrevMonth').disabled = (idx === 0);
     document.getElementById('btnNextMonth').disabled = (idx === MONTHS_DATA.length - 1);
+
+    // Tooltip contents
+    const GREEN = '#1B9B3B';
+    document.getElementById('tooltipQS').querySelector('.tooltip-content').innerHTML =
+      buildTooltipContent('Quotes Sent', 'quotes', m.quotes.val, GREEN, 'gQS');
+    document.getElementById('tooltipOP').querySelector('.tooltip-content').innerHTML =
+      buildTooltipContent('Orders Placed', 'orders', m.orders.val, GREEN, 'gOP');
+    document.getElementById('tooltipTS').querySelector('.tooltip-content').innerHTML =
+      buildTooltipContent('Total Spend', 'spend', m.spend.val, GREEN, 'gTS');
+    document.getElementById('tooltipPP').querySelector('.tooltip-content').innerHTML =
+      buildTooltipContent('Parts Profit', 'profit', m.profit.val, GREEN, 'gPP');
+
+    // Toggle mode: enable pointer events on cells
+    ['cellQS','cellOP','cellTS','cellPP'].forEach(id => {
+      document.getElementById(id).classList.toggle('toggle-active', trendMode === 'toggle');
+    });
+
+    // Demo bar active button
+    ['demoBtnQtr','demoBtnYtd','demoBtnToggle'].forEach(id => {
+      document.getElementById(id).classList.remove('active');
+    });
+    const activeBtn = trendMode === 'qtr' ? 'demoBtnQtr' : trendMode === 'ytd' ? 'demoBtnYtd' : 'demoBtnToggle';
+    document.getElementById(activeBtn).classList.add('active');
   }
 
+  // ── Mode setters (global for inline onclick) ──────────────────────────────
+  function setTrendMode(mode) {
+    trendMode = mode;
+    tooltipInnerMode = 'qtr';
+    updateDashboard(currentMonthIdx);
+  }
+
+  function setTooltipInnerMode(mode) {
+    tooltipInnerMode = mode;
+    updateDashboard(currentMonthIdx);
+  }
+
+  // ── Month nav ─────────────────────────────────────────────────────────────
   document.getElementById('btnPrevMonth').addEventListener('click', function() {
     if (currentMonthIdx > 0) { currentMonthIdx--; updateDashboard(currentMonthIdx); }
   });
@@ -608,7 +690,132 @@
     if (currentMonthIdx < MONTHS_DATA.length - 1) { currentMonthIdx++; updateDashboard(currentMonthIdx); }
   });
 
+  // ── Sub-nav ───────────────────────────────────────────────────────────────
+  document.querySelectorAll('.sub-item').forEach(item => {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.sub-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // ── Compliance bars ───────────────────────────────────────────────────────
+  (function() {
+    const bars = [
+      { label:'OEM Mix',         actual:52,   target:65,  unit:'%', hi:true },
+      { label:'OEM Discount',    actual:28.5, target:32,  unit:'%', hi:true },
+      { label:'Parallel Mix',    actual:17,   target:26,  unit:'%', hi:true },
+      { label:'Aftermarket Mix', actual:31,   target:5,   unit:'%', hi:false },
+      { label:'Avg Parts Basket',actual:621,  target:500, unit:'$', hi:false },
+    ];
+    const container = document.getElementById('complianceBody');
+    bars.forEach(b => {
+      const isGood = b.hi ? b.actual >= b.target : b.actual <= b.target;
+      const isWarn = b.hi ? (b.actual >= b.target*0.85 && b.actual < b.target) : (b.actual <= b.target*1.25 && b.actual > b.target);
+      const color = isGood ? 'var(--green-dark)' : isWarn ? 'var(--amber)' : 'var(--red)';
+      const max = Math.max(b.actual, b.target) * (b.hi ? 1.15 : 1.3);
+      const aPct = Math.min((b.actual/max)*100,100);
+      const tPct = Math.min((b.target/max)*100,100);
+      const fmt = v => b.unit==='$' ? '$'+v.toLocaleString() : v+'%';
+      const div = document.createElement('div');
+      div.className = 'target-bar';
+      div.innerHTML = '<div class="target-bar-header"><span class="name">'+b.label+'</span><div class="values"><span class="actual" style="color:'+color+'">'+fmt(b.actual)+'</span><span class="target">target '+fmt(b.target)+'</span></div></div><div class="bar-track"><div class="bar-fill" style="width:'+aPct+'%;background:'+color+'"></div><div class="bar-marker" style="left:'+tPct+'%"></div></div>';
+      container.appendChild(div);
+    });
+  })();
+
+  // ── Releases / What's New ─────────────────────────────────────────────────
+  const RELEASES = [
+    {
+      version: 'v1.2',
+      date: 'May 2026',
+      title: 'Month Navigation & Hours Saved',
+      description: 'You can now scroll back through your monthly history and track hours saved across every month.',
+      features: [
+        { icon: '📅', text: 'Navigate back through each month with prev / next arrows' },
+        { icon: '⏱', text: 'Hours Saved now tracked and shown across all months' },
+        { icon: '📄', text: 'Smart Receipting — invoices matched to orders automatically' },
+        { icon: '📈', text: 'KPI tooltips now support QTR and YTD trend switching' },
+      ]
+    },
+    {
+      version: 'v1.1',
+      date: 'Apr 2026',
+      title: 'Value Dashboard Pilot Launch',
+      description: 'Your personalised view of PartsCheck activity — quotes, orders, profit and compliance in one place.',
+      features: [
+        { icon: '💰', text: 'Parts Profit tracking with margin %' },
+        { icon: '✅', text: 'Insurer Compliance target bars — actual vs. target' },
+        { icon: '🔧', text: 'Part Type Mix breakdown (OEM / Aftermarket / Recycled)' },
+        { icon: '⚠️', text: 'Missed Savings alert widget' },
+      ]
+    }
+  ];
+
+  function buildWhatNewContent() {
+    const latest = RELEASES[0];
+    const prev = RELEASES.slice(1);
+    let html = '';
+    html += '<div class="wn-release-badge">';
+    html += '<span class="wn-version">' + latest.version + '</span>';
+    html += '<span class="wn-date">' + latest.date + '</span>';
+    html += '<span class="wn-new-tag">NEW</span>';
+    html += '</div>';
+    html += '<div class="wn-release-title">' + latest.title + '</div>';
+    html += '<div class="wn-release-desc">' + latest.description + '</div>';
+    html += '<ul class="wn-features">';
+    latest.features.forEach(function(f) {
+      html += '<li><span class="wn-feat-icon">' + f.icon + '</span><span>' + f.text + '</span></li>';
+    });
+    html += '</ul>';
+    if (prev.length > 0) {
+      html += '<hr class="wn-divider">';
+      html += '<div class="wn-prev-heading">Previous Updates</div>';
+      html += '<div class="wn-prev-list">';
+      prev.forEach(function(r) {
+        html += '<div class="wn-prev-item">';
+        html += '<span class="wn-prev-version">' + r.version + '</span>';
+        html += '<span class="wn-prev-title">' + r.title + '</span>';
+        html += '<span class="wn-prev-date">' + r.date + '</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+    return html;
+  }
+
+  function openWhatNew() {
+    document.getElementById('wnBody').innerHTML = buildWhatNewContent();
+    document.getElementById('wnBackdrop').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeWhatNew() {
+    document.getElementById('wnBackdrop').classList.remove('open');
+    document.body.style.overflow = '';
+    localStorage.setItem('pc_last_seen_version', RELEASES[0].version);
+    var dot = document.getElementById('wnDot');
+    if (dot) dot.classList.add('hidden');
+  }
+
+  function handleBackdropClick(e) {
+    if (e.target === document.getElementById('wnBackdrop')) closeWhatNew();
+  }
+
+  function checkWhatNew() {
+    var lastSeen = localStorage.getItem('pc_last_seen_version');
+    var latest = RELEASES[0].version;
+    var dot = document.getElementById('wnDot');
+    if (lastSeen !== latest) {
+      if (dot) dot.classList.remove('hidden');
+      setTimeout(openWhatNew, 700);
+    } else {
+      if (dot) dot.classList.add('hidden');
+    }
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
   updateDashboard(currentMonthIdx);
+  checkWhatNew();
 </script>
 </body>
 </html>
