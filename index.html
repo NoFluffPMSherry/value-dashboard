@@ -266,6 +266,40 @@
   .wn-prev-title { font-size:11px; color:#444; font-weight:600; flex:1; }
   .wn-prev-date { font-size:10px; color:#aaa; flex-shrink:0; }
   .wn-footer { padding:12px 20px 16px; display:flex; justify-content:flex-end; border-top:1px solid #eee; flex-shrink:0; background:#fff; }
+
+  /* OUTAGE BANNER */
+  .outage-banner { display:none; align-items:center; gap:14px; padding:10px 20px; font-size:12px; border-bottom:3px solid #D97706; background:#FFFBEB; color:#78350F; }
+  .outage-banner.show { display:flex; }
+  .outage-banner.critical { background:#FEF2F2; border-color:#DC2626; color:#7F1D1D; }
+  .outage-icon { font-size:18px; flex-shrink:0; }
+  .outage-content { flex:1; line-height:1.5; }
+  .outage-content strong { font-weight:700; }
+  .outage-link { color:inherit; font-weight:700; text-decoration:underline; margin-left:10px; white-space:nowrap; }
+  .outage-link:hover { opacity:0.8; }
+  .outage-dismiss { background:none; border:none; cursor:pointer; font-size:16px; color:inherit; opacity:0.6; flex-shrink:0; padding:2px 6px; }
+  .outage-dismiss:hover { opacity:1; }
+
+  /* KC STATUS CARD */
+  .kc-status-card { margin:8px 0 0; background:#fff; border:1px solid #e0e0e0; border-radius:4px; padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:box-shadow .15s; text-decoration:none; color:inherit; }
+  .kc-status-card:hover { box-shadow:0 2px 8px rgba(0,0,0,.1); }
+  .kc-status-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+  .kc-status-dot.ok { background:#22C55E; box-shadow:0 0 0 3px rgba(34,197,94,.2); }
+  .kc-status-dot.incident { background:#F59E0B; box-shadow:0 0 0 3px rgba(245,158,11,.25); animation:pulse-amber 1.5s infinite; }
+  .kc-status-dot.outage { background:#EF4444; box-shadow:0 0 0 3px rgba(239,68,68,.25); animation:pulse-red 1.5s infinite; }
+  @keyframes pulse-amber { 0%,100%{box-shadow:0 0 0 3px rgba(245,158,11,.25)} 50%{box-shadow:0 0 0 6px rgba(245,158,11,.1)} }
+  @keyframes pulse-red { 0%,100%{box-shadow:0 0 0 3px rgba(239,68,68,.25)} 50%{box-shadow:0 0 0 6px rgba(239,68,68,.1)} }
+  .kc-status-text { flex:1; }
+  .kc-status-label { font-size:11px; font-weight:700; color:#222; }
+  .kc-status-sub { font-size:10px; color:#888; margin-top:2px; }
+  .kc-status-arrow { font-size:14px; color:#bbb; flex-shrink:0; }
+
+  /* DEMO TOGGLE */
+  .demo-strip { position:fixed; bottom:0; left:50%; transform:translateX(-50%); background:#1a1a2e; color:#fff; display:flex; align-items:center; gap:0; border-radius:8px 8px 0 0; overflow:hidden; z-index:9999; font-size:10px; font-weight:700; letter-spacing:0.5px; box-shadow:0 -2px 12px rgba(0,0,0,.2); }
+  .demo-strip-label { padding:8px 14px; color:#aaa; text-transform:uppercase; border-right:1px solid #333; white-space:nowrap; }
+  .demo-btn { padding:8px 16px; cursor:pointer; color:#fff; text-transform:uppercase; border-right:1px solid #333; white-space:nowrap; transition:background .15s; }
+  .demo-btn:hover { background:#2a2a4e; }
+  .demo-btn.active { background:#1B9B3B; color:#fff; }
+  .demo-btn:last-child { border-right:none; }
 </style>
 </head>
 <body>
@@ -328,6 +362,16 @@
     <div class="sub-item" id="subKnowledge"><div class="sub-badge" style="font-style:italic">i</div>KNOWLEDGE CENTRE<span class="msg-pill" id="kcNewBadge" style="display:none">NEW</span></div>
     <div class="sub-item" id="subSettings"><div class="sub-badge">&#9881;</div>SETTINGS</div>
     <div class="sub-item" id="subMessages" style="margin-left:auto"><div class="sub-badge">&#9993;</div>MESSAGES<span class="msg-pill">3</span></div>
+  </div>
+
+  <!-- OUTAGE BANNER -->
+  <div class="outage-banner" id="outageBanner">
+    <span class="outage-icon">⚠</span>
+    <div class="outage-content">
+      <strong id="outageTitle">Service Disruption</strong> — <span id="outageDesc">PartsCheck is currently experiencing issues with Quote Pricing. Our team is investigating.</span>
+      <a href="https://status.partscheck.com.au/" target="_blank" class="outage-link">View status page →</a>
+    </div>
+    <button class="outage-dismiss" onclick="document.getElementById('outageBanner').classList.remove('show','critical')">✕</button>
   </div>
 
   <!-- MAIN LAYOUT -->
@@ -545,6 +589,18 @@
             <div class="tut-card-body"><div class="tut-card-title">Understanding Insurer Compliance</div><div class="tut-card-desc">What the compliance bars mean and how to read actual vs. target for your insurer rules.</div></div>
           </div>
         </div>
+      </div>
+      <!-- SYSTEM STATUS -->
+      <div>
+        <div class="tut-section-label">System Status</div>
+        <a href="https://status.partscheck.com.au/" target="_blank" class="kc-status-card" id="kcStatusCard">
+          <div class="kc-status-dot ok" id="kcStatusDot"></div>
+          <div class="kc-status-text">
+            <div class="kc-status-label" id="kcStatusLabel">All Systems Operational</div>
+            <div class="kc-status-sub" id="kcStatusSub">No incidents reported · status.partscheck.com.au</div>
+          </div>
+          <div class="kc-status-arrow">↗</div>
+        </a>
       </div>
     </div>
 
@@ -1195,9 +1251,54 @@
     }
   }
 
+  // ── Status demo ───────────────────────────────────────────────────────────
+  var demoStatus = 'ok'; // 'ok' | 'incident' | 'outage'
+
+  function setDemoStatus(s) {
+    demoStatus = s;
+    var banner = document.getElementById('outageBanner');
+    var dot    = document.getElementById('kcStatusDot');
+    var label  = document.getElementById('kcStatusLabel');
+    var sub    = document.getElementById('kcStatusSub');
+    var btns   = document.querySelectorAll('.demo-btn');
+    btns.forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById('demoBtn_' + s).classList.add('active');
+
+    if (s === 'ok') {
+      banner.classList.remove('show','critical');
+      dot.className = 'kc-status-dot ok';
+      label.textContent = 'All Systems Operational';
+      sub.textContent = 'No incidents reported · status.partscheck.com.au';
+    } else if (s === 'incident') {
+      banner.classList.add('show');
+      banner.classList.remove('critical');
+      document.getElementById('outageTitle').textContent = 'Service Disruption';
+      document.getElementById('outageDesc').textContent = 'PartsCheck is experiencing issues with Quote Pricing. Our team is investigating.';
+      dot.className = 'kc-status-dot incident';
+      label.textContent = 'Partial Outage — Quote Pricing';
+      sub.textContent = 'Degraded performance · Updated 5 min ago · status.partscheck.com.au';
+    } else {
+      banner.classList.add('show','critical');
+      document.getElementById('outageTitle').textContent = 'Major Outage';
+      document.getElementById('outageDesc').textContent = 'PartsCheck is currently unavailable. Engineers are working to restore service.';
+      dot.className = 'kc-status-dot outage';
+      label.textContent = 'Major Outage — All Systems Affected';
+      sub.textContent = 'Platform unreachable · Updated 2 min ago · status.partscheck.com.au';
+    }
+  }
+
   // ── Init ──────────────────────────────────────────────────────────────────
   updateDashboard(MONTHS_DATA[currentMonthIdx]);
   checkWhatNew();
 </script>
+
+<!-- DEMO SCENARIO STRIP -->
+<div class="demo-strip">
+  <div class="demo-strip-label">Demo scenario:</div>
+  <div class="demo-btn active" id="demoBtn_ok" onclick="setDemoStatus('ok')">✓ All Clear</div>
+  <div class="demo-btn" id="demoBtn_incident" onclick="setDemoStatus('incident')">⚠ Partial Outage</div>
+  <div class="demo-btn" id="demoBtn_outage" onclick="setDemoStatus('outage')">✕ Major Outage</div>
+</div>
+
 </body>
 </html>
