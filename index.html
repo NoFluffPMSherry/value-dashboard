@@ -287,20 +287,20 @@
   .kc-status-tab-dot { width:7px; height:7px; border-radius:50%; background:#22C55E; display:inline-block; margin-left:6px; vertical-align:middle; flex-shrink:0; }
   .kc-status-tab-dot.incident { background:#F59E0B; animation:pulse-amber 1.5s infinite; }
   .kc-status-tab-dot.outage { background:#EF4444; animation:pulse-red 1.5s infinite; }
-  .status-pane { flex:1; padding:40px 48px; overflow-y:auto; background:#f5f5f5; flex-direction:column; align-items:flex-start; gap:0; }
+  .status-pane { flex:1; padding:36px 44px; overflow-y:auto; background:#f5f5f5; flex-direction:column; align-items:flex-start; gap:28px; }
   .status-pane.active { display:flex; }
-  .status-hero { background:#fff; border:1px solid #e0e0e0; border-radius:6px; padding:32px 36px; width:100%; max-width:560px; display:flex; flex-direction:column; gap:20px; }
-  .status-hero-row { display:flex; align-items:center; gap:16px; }
-  .status-big-dot { width:20px; height:20px; border-radius:50%; flex-shrink:0; }
+  .status-hero { display:flex; flex-direction:column; gap:16px; }
+  .status-hero-row { display:flex; align-items:center; gap:14px; }
+  .status-big-dot { width:18px; height:18px; border-radius:50%; flex-shrink:0; }
   .status-big-dot.ok { background:#22C55E; box-shadow:0 0 0 5px rgba(34,197,94,.15); }
   .status-big-dot.incident { background:#F59E0B; box-shadow:0 0 0 5px rgba(245,158,11,.2); animation:pulse-amber 1.5s infinite; }
   .status-big-dot.outage { background:#EF4444; box-shadow:0 0 0 5px rgba(239,68,68,.2); animation:pulse-red 1.5s infinite; }
-  .status-hero-title { font-size:18px; font-weight:700; color:#222; }
-  .status-hero-desc { font-size:12px; color:#666; line-height:1.6; }
-  .status-hero-updated { font-size:10px; color:#aaa; border-top:1px solid #f0f0f0; padding-top:14px; }
-  .status-cta { display:inline-flex; align-items:center; gap:8px; background:var(--green-dark); color:#fff; font-size:11px; font-weight:700; letter-spacing:0.4px; text-decoration:none; padding:9px 18px; border-radius:3px; transition:opacity .15s; }
+  .status-hero-title { font-size:20px; font-weight:700; color:#222; }
+  .status-hero-desc { font-size:12px; color:#666; line-height:1.7; max-width:520px; }
+  .status-hero-updated { font-size:10px; color:#bbb; }
+  .status-cta { display:inline-flex; align-items:center; gap:8px; background:var(--green-dark); color:#fff; font-size:11px; font-weight:700; letter-spacing:0.4px; text-decoration:none; padding:9px 20px; border-radius:3px; transition:opacity .15s; }
   .status-cta:hover { opacity:.85; }
-  .status-hint { margin-top:20px; font-size:11px; color:#999; line-height:1.6; max-width:480px; }
+  .status-hint { font-size:11px; color:#aaa; line-height:1.6; }
   .kc-status-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
   .kc-status-dot.ok { background:#22C55E; box-shadow:0 0 0 3px rgba(34,197,94,.2); }
   .kc-status-dot.incident { background:#F59E0B; box-shadow:0 0 0 3px rgba(245,158,11,.25); animation:pulse-amber 1.5s infinite; }
