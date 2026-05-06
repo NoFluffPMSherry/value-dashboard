@@ -356,16 +356,6 @@
     <!-- CONTENT AREA -->
     <div class="content-area">
 
-      <!-- DEMO BAR -->
-      <div class="demo-bar">
-        <span class="demo-bar-label">&#9998; Demo: Trend view</span>
-        <div class="demo-btns">
-          <button class="demo-btn" id="demoBtnQtr" onclick="setTrendMode('qtr')">QTR (3-month rolling)</button>
-          <button class="demo-btn" id="demoBtnYtd" onclick="setTrendMode('ytd')">YTD (full year)</button>
-          <button class="demo-btn" id="demoBtnToggle" onclick="setTrendMode('toggle')">QTR / YTD toggle</button>
-        </div>
-      </div>
-
       <!-- MTD PANEL -->
       <div class="mtd-panel">
         <div class="mtd-header">
@@ -736,7 +726,7 @@
 
   // ── State ─────────────────────────────────────────────────────────────────
   let currentMonthIdx = 11;
-  let trendMode = 'qtr';
+  let trendMode = 'toggle';
   let tooltipInnerMode = 'qtr';
   let periodMode = 'month';
 
@@ -940,17 +930,10 @@
       document.getElementById('tooltipPP').innerHTML = tooltipNote;
     }
 
-    // Toggle mode: enable pointer events on cells
+    // Always in toggle mode — enable pointer events on KPI cells
     ['cellQS','cellOP','cellTS','cellPP'].forEach(function(id) {
-      document.getElementById(id).classList.toggle('toggle-active', trendMode === 'toggle');
+      document.getElementById(id).classList.add('toggle-active');
     });
-
-    // Demo bar active button
-    ['demoBtnQtr','demoBtnYtd','demoBtnToggle'].forEach(function(id) {
-      document.getElementById(id).classList.remove('active');
-    });
-    const activeBtn = trendMode === 'qtr' ? 'demoBtnQtr' : trendMode === 'ytd' ? 'demoBtnYtd' : 'demoBtnToggle';
-    document.getElementById(activeBtn).classList.add('active');
 
     // Part Type Mix
     renderMixWidget(periodMode);
