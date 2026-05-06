@@ -651,7 +651,7 @@
       </div>
       <div class="wn-body" id="wnBody"></div>
       <div class="wn-footer">
-        <button class="btn-green" onclick="closeWhatNew()">Got it &rarr;</button>
+        <button class="btn-green" onclick="closeWhatNew(); document.querySelectorAll('.sub-item').forEach(function(i){i.classList.remove('active')}); document.getElementById('subKnowledge').classList.add('active'); showKnowledgeCentre('releases');">View all release notes &rarr;</button>
       </div>
     </div>
   </div>
