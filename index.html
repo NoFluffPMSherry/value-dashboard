@@ -12,6 +12,7 @@
     --green-btn: #1B9B3B;
     --blue: #337ab7;
     --purple: #9b59b6;
+    --orange: #e67e22;
     --red: #C0392B;
     --amber: #E07A00;
     --gray-border: #ddd;
@@ -73,7 +74,8 @@
 
   /* MTD PANEL */
   .mtd-panel { background: #fff; border: 1px solid #e0e0e0; border-radius: 3px; overflow: visible; }
-  .mtd-header { background: var(--green-dark); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; border-radius: 3px 3px 0 0; }
+  .mtd-header { background: var(--green-dark); color: #fff; display: flex; flex-direction: column; gap: 6px; padding: 8px 16px; border-radius: 3px 3px 0 0; }
+  .mtd-header-row { display: flex; align-items: center; justify-content: space-between; }
   .mtd-header .title { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; }
   .mtd-header .date-badge { background: #fff; color: var(--green-dark); font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 2px; min-width: 72px; text-align: center; }
   .mtd-subtitle { font-size: 11px; color: #888; padding: 6px 16px; border-bottom: 1px solid #eee; }
@@ -91,6 +93,12 @@
   .trend-up { color: var(--green-dark); font-weight: 700; }
   .trend-neutral { color: #aaa; font-style: italic; }
 
+  /* PERIOD PILLS */
+  .period-pills { display: flex; gap: 4px; }
+  .period-pill { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); border-radius: 3px; font-size: 9px; font-weight: 700; padding: 3px 10px; cursor: pointer; letter-spacing: 0.4px; font-family: Arial, Helvetica, sans-serif; transition: all .15s; }
+  .period-pill:hover { background: rgba(255,255,255,0.25); color: #fff; }
+  .period-pill.active { background: #fff; color: var(--green-dark); border-color: #fff; }
+
   /* SPARKLINE TOOLTIP */
   .tooltip { position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%);
     background: #fff; border: 1px solid #ddd; border-radius: 5px; padding: 10px 12px;
@@ -106,6 +114,7 @@
   .tooltip-toggle-btns { display: flex; gap: 4px; margin-bottom: 8px; }
   .tt-btn { font-size: 8px; font-weight: 700; padding: 2px 8px; border-radius: 2px; cursor: pointer; font-family: Arial, Helvetica, sans-serif; border: 1px solid #ddd; background: #fff; color: #aaa; }
   .tt-btn.active { border-color: var(--green-dark); background: var(--green-dark); color: #fff; }
+  .tooltip-note { font-size: 10px; color: #aaa; font-style: italic; text-align: center; padding: 8px 0; }
 
   /* MONTH NAV */
   .mtd-nav { display: flex; align-items: center; gap: 6px; }
@@ -333,11 +342,20 @@
       <!-- MTD PANEL -->
       <div class="mtd-panel">
         <div class="mtd-header">
-          <span class="title">MONTH TO DATE IN NUMBERS</span>
-          <div class="mtd-nav">
-            <button class="mtd-nav-btn" id="btnPrevMonth">&#8249;</button>
-            <span class="date-badge" id="mtdMonthBadge">DEC 2026</span>
-            <button class="mtd-nav-btn" id="btnNextMonth" disabled>&#8250;</button>
+          <div class="mtd-header-row">
+            <span class="title" id="mtdTitle">MONTH TO DATE IN NUMBERS</span>
+            <div class="mtd-nav" id="monthNavWrap">
+              <button class="mtd-nav-btn" id="btnPrevMonth">&#8249;</button>
+              <span class="date-badge" id="mtdMonthBadge">DEC 2026</span>
+              <button class="mtd-nav-btn" id="btnNextMonth" disabled>&#8250;</button>
+            </div>
+          </div>
+          <div class="mtd-header-row">
+            <div class="period-pills">
+              <button class="period-pill" id="periodToday" onclick="setPeriodMode('today')">TODAY</button>
+              <button class="period-pill" id="periodWeek" onclick="setPeriodMode('week')">THIS WEEK</button>
+              <button class="period-pill active" id="periodMonth" onclick="setPeriodMode('month')">THIS MONTH</button>
+            </div>
           </div>
         </div>
         <div class="mtd-subtitle" id="mtdSubtitle">A snapshot of how PartsCheck powered your business in DEC 2026</div>
@@ -373,13 +391,13 @@
             <div class="tooltip" id="tooltipTS"><div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div><div class="tooltip-content"></div></div>
           </div>
 
-          <!-- Parts Profit -->
+          <!-- Parts Margin (was Parts Profit — $ removed, % is hero) -->
           <div class="kpi-cell" id="cellPP">
             <div class="kpi-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-            <div class="kpi-name">Parts Profit</div>
-            <div class="kpi-value" id="kpiProfitVal">$7.8K</div>
-            <div class="kpi-sub" id="kpiProfitSub">24.3% margin</div>
-            <div class="kpi-trend" id="kpiProfitTrend"><span class="trend-up">&#9650; +1.0pts</span> margin vs last mo.</div>
+            <div class="kpi-name">Parts Margin</div>
+            <div class="kpi-value" id="kpiMarginVal">24.3%</div>
+            <div class="kpi-sub" id="kpiMarginSub">on 287 parts ordered</div>
+            <div class="kpi-trend" id="kpiMarginTrend"><span class="trend-up">&#9650; +0.2pts</span> margin vs last mo.</div>
             <div class="tooltip" id="tooltipPP"><div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div><div class="tooltip-content"></div></div>
           </div>
 
@@ -404,24 +422,8 @@
       <div class="widget-row">
 
         <div class="widget">
-          <div class="widget-head"><span class="title">PART TYPE MIX</span><span class="badge badge-blue" id="mixMonthBadge">DEC 2026</span></div>
-          <div class="widget-body">
-            <div class="mix-bar">
-              <div class="mix-seg" style="width:52%;background:#337ab7;border-radius:2px 0 0 2px"></div>
-              <div class="mix-seg" style="width:31%;background:#9b59b6"></div>
-              <div class="mix-seg" style="width:17%;background:#7DC21E;border-radius:0 2px 2px 0"></div>
-            </div>
-            <div class="mix-legend">
-              <div class="mix-legend-item"><div class="mix-dot" style="background:#337ab7"></div>OEM <strong style="color:#337ab7">52%</strong></div>
-              <div class="mix-legend-item"><div class="mix-dot" style="background:#9b59b6"></div>Aftermarket <strong style="color:#9b59b6">31%</strong></div>
-              <div class="mix-legend-item"><div class="mix-dot" style="background:#7DC21E"></div>Used <strong style="color:#7DC21E">17%</strong></div>
-            </div>
-            <div class="mix-detail">
-              <div class="mix-detail-row"><div class="left"><div class="mix-dot" style="background:#337ab7"></div><span style="color:#666">OEM</span></div><div class="right"><span class="count">260 parts</span><span style="font-weight:700;color:#337ab7;min-width:28px;text-align:right">52%</span></div></div>
-              <div class="mix-detail-row"><div class="left"><div class="mix-dot" style="background:#9b59b6"></div><span style="color:#666">Aftermarket</span></div><div class="right"><span class="count">155 parts</span><span style="font-weight:700;color:#9b59b6;min-width:28px;text-align:right">31%</span></div></div>
-              <div class="mix-detail-row"><div class="left"><div class="mix-dot" style="background:#7DC21E"></div><span style="color:#666">Used</span></div><div class="right"><span class="count">85 parts</span><span style="font-weight:700;color:#7DC21E;min-width:28px;text-align:right">17%</span></div></div>
-            </div>
-          </div>
+          <div class="widget-head"><span class="title">PART TYPE MIX</span><span class="badge badge-blue" id="mixPeriodBadge">DEC 2026</span></div>
+          <div class="widget-body" id="mixWidgetBody"></div>
           <div class="widget-footer"><span class="meta" id="mixFooter">500 parts ordered this month</span><a class="link" href="#">View Detail</a></div>
         </div>
 
@@ -514,122 +516,214 @@
       quotes:{ val:'29', sub:'241 parts requested', trend:'&#9650; +2%', raw:29 },
       orders:{ val:'18', sub:'152 parts ordered',   trend:'&#9650; +3%', raw:18 },
       spend: { val:'$13.8K', sub:'$498 avg per job',trend:'&#9650; +3%', raw:13.8 },
-      profit:{ val:'$2.9K', sub:'21.0% margin',     trend:'&#9650; +0.5pts', raw:2.9 },
+      margin:{ val:'21.0%', sub:'on 152 parts ordered', trend:'&#9650; +0.5pts', raw:21.0 },
       hours:'28 hrs' },
     { label:'FEB 2026', subtitle:'A snapshot of how PartsCheck powered your business in FEB 2026',
       quotes:{ val:'31', sub:'260 parts requested', trend:'&#9650; +7%', raw:31 },
       orders:{ val:'20', sub:'169 parts ordered',   trend:'&#9650; +11%', raw:20 },
       spend: { val:'$15.2K', sub:'$516 avg per job',trend:'&#9650; +10%', raw:15.2 },
-      profit:{ val:'$3.2K', sub:'21.1% margin',     trend:'&#9650; +0.1pts', raw:3.2 },
+      margin:{ val:'21.1%', sub:'on 169 parts ordered', trend:'&#9650; +0.1pts', raw:21.1 },
       hours:'31 hrs' },
     { label:'MAR 2026', subtitle:'A snapshot of how PartsCheck powered your business in MAR 2026',
       quotes:{ val:'33', sub:'273 parts requested', trend:'&#9650; +6%', raw:33 },
       orders:{ val:'21', sub:'178 parts ordered',   trend:'&#9650; +5%', raw:21 },
       spend: { val:'$16.6K', sub:'$531 avg per job',trend:'&#9650; +9%', raw:16.6 },
-      profit:{ val:'$3.6K', sub:'21.7% margin',     trend:'&#9650; +0.6pts', raw:3.6 },
+      margin:{ val:'21.7%', sub:'on 178 parts ordered', trend:'&#9650; +0.6pts', raw:21.7 },
       hours:'34 hrs' },
     { label:'APR 2026', subtitle:'A snapshot of how PartsCheck powered your business in APR 2026',
       quotes:{ val:'34', sub:'286 parts requested', trend:'&#9650; +4%', raw:34 },
       orders:{ val:'22', sub:'187 parts ordered',   trend:'&#9650; +5%', raw:22 },
       spend: { val:'$18.6K', sub:'$548 avg per job',trend:'&#9650; +12%', raw:18.6 },
-      profit:{ val:'$4.2K', sub:'22.6% margin',     trend:'&#9650; +1.2pts', raw:4.2 },
+      margin:{ val:'22.6%', sub:'on 187 parts ordered', trend:'&#9650; +1.2pts', raw:22.6 },
       hours:'38 hrs' },
     { label:'MAY 2026', subtitle:'A snapshot of how PartsCheck powered your business in MAY 2026',
       quotes:{ val:'36', sub:'301 parts requested', trend:'&#9650; +6%', raw:36 },
       orders:{ val:'24', sub:'203 parts ordered',   trend:'&#9650; +9%', raw:24 },
       spend: { val:'$20.1K', sub:'$563 avg per job',trend:'&#9650; +8%', raw:20.1 },
-      profit:{ val:'$4.6K', sub:'22.9% margin',     trend:'&#9650; +0.3pts', raw:4.6 },
+      margin:{ val:'22.9%', sub:'on 203 parts ordered', trend:'&#9650; +0.3pts', raw:22.9 },
       hours:'41 hrs' },
     { label:'JUN 2026', subtitle:'A snapshot of how PartsCheck powered your business in JUN 2026',
       quotes:{ val:'38', sub:'318 parts requested', trend:'&#9650; +6%', raw:38 },
       orders:{ val:'25', sub:'213 parts ordered',   trend:'&#9650; +4%', raw:25 },
       spend: { val:'$21.8K', sub:'$579 avg per job',trend:'&#9650; +8%', raw:21.8 },
-      profit:{ val:'$5.0K', sub:'22.9% margin',     trend:'&#9650; +0.0pts', raw:5.0 },
+      margin:{ val:'22.9%', sub:'on 213 parts ordered', trend:'&#9650; +0.0pts', raw:22.9 },
       hours:'43 hrs' },
     { label:'JUL 2026', subtitle:'A snapshot of how PartsCheck powered your business in JUL 2026',
       quotes:{ val:'39', sub:'326 parts requested', trend:'&#9650; +3%', raw:39 },
       orders:{ val:'26', sub:'221 parts ordered',   trend:'&#9650; +4%', raw:26 },
       spend: { val:'$22.5K', sub:'$587 avg per job',trend:'&#9650; +3%', raw:22.5 },
-      profit:{ val:'$5.3K', sub:'23.6% margin',     trend:'&#9650; +0.7pts', raw:5.3 },
+      margin:{ val:'23.6%', sub:'on 221 parts ordered', trend:'&#9650; +0.7pts', raw:23.6 },
       hours:'45 hrs' },
     { label:'AUG 2026', subtitle:'A snapshot of how PartsCheck powered your business in AUG 2026',
       quotes:{ val:'41', sub:'344 parts requested', trend:'&#9650; +5%', raw:41 },
       orders:{ val:'27', sub:'230 parts ordered',   trend:'&#9650; +4%', raw:27 },
       spend: { val:'$24.2K', sub:'$600 avg per job',trend:'&#9650; +8%', raw:24.2 },
-      profit:{ val:'$5.7K', sub:'23.6% margin',     trend:'&#9650; +0.0pts', raw:5.7 },
+      margin:{ val:'23.6%', sub:'on 230 parts ordered', trend:'&#9650; +0.0pts', raw:23.6 },
       hours:'47 hrs' },
     { label:'SEP 2026', subtitle:'A snapshot of how PartsCheck powered your business in SEP 2026',
       quotes:{ val:'43', sub:'360 parts requested', trend:'&#9650; +5%', raw:43 },
       orders:{ val:'29', sub:'246 parts ordered',   trend:'&#9650; +7%', raw:29 },
       spend: { val:'$26.0K', sub:'$607 avg per job',trend:'&#9650; +7%', raw:26.0 },
-      profit:{ val:'$6.2K', sub:'23.8% margin',     trend:'&#9650; +0.2pts', raw:6.2 },
+      margin:{ val:'23.8%', sub:'on 246 parts ordered', trend:'&#9650; +0.2pts', raw:23.8 },
       hours:'50 hrs' },
     { label:'OCT 2026', subtitle:'A snapshot of how PartsCheck powered your business in OCT 2026',
       quotes:{ val:'45', sub:'377 parts requested', trend:'&#9650; +5%', raw:45 },
       orders:{ val:'31', sub:'263 parts ordered',   trend:'&#9650; +7%', raw:31 },
       spend: { val:'$27.8K', sub:'$611 avg per job',trend:'&#9650; +7%', raw:27.8 },
-      profit:{ val:'$6.7K', sub:'24.1% margin',     trend:'&#9650; +0.3pts', raw:6.7 },
+      margin:{ val:'24.1%', sub:'on 263 parts ordered', trend:'&#9650; +0.3pts', raw:24.1 },
       hours:'52 hrs' },
     { label:'NOV 2026', subtitle:'A snapshot of how PartsCheck powered your business in NOV 2026',
       quotes:{ val:'47', sub:'395 parts requested', trend:'&#9650; +4%', raw:47 },
       orders:{ val:'32', sub:'272 parts ordered',   trend:'&#9650; +3%', raw:32 },
       spend: { val:'$29.5K', sub:'$615 avg per job',trend:'&#9650; +6%', raw:29.5 },
-      profit:{ val:'$7.1K', sub:'24.1% margin',     trend:'&#9650; +0.0pts', raw:7.1 },
+      margin:{ val:'24.1%', sub:'on 272 parts ordered', trend:'&#9650; +0.0pts', raw:24.1 },
       hours:'55 hrs' },
     { label:'DEC 2026', subtitle:'A snapshot of how PartsCheck powered your business in DEC 2026',
       quotes:{ val:'50', sub:'418 parts requested', trend:'&#9650; +6%', raw:50 },
       orders:{ val:'34', sub:'287 parts ordered',   trend:'&#9650; +6%', raw:34 },
       spend: { val:'$32.1K', sub:'$621 avg per job',trend:'&#9650; +9%', raw:32.1 },
-      profit:{ val:'$7.8K', sub:'24.3% margin',     trend:'&#9650; +0.8pts', raw:7.8 },
+      margin:{ val:'24.3%', sub:'on 287 parts ordered', trend:'&#9650; +0.2pts', raw:24.3 },
       hours:'58 hrs' },
   ];
+
+  const TODAY_DATA = {
+    label:'TODAY', subtitle:'A snapshot of how PartsCheck powered your business today',
+    quotes:{ val:'4', sub:'33 parts requested', trend:'&#9650; tracking above avg', raw:4 },
+    orders:{ val:'3', sub:'24 parts ordered', trend:'&#9650; on pace', raw:3 },
+    spend: { val:'$2.6K', sub:'$620 avg per job', trend:'&#9650; +2%', raw:2.6 },
+    margin:{ val:'24.1%', sub:'on 24 parts ordered', trend:'&#9650; +0.2pts', raw:24.1 },
+    hours:'4.8 hrs'
+  };
+
+  const WEEK_DATA = {
+    label:'THIS WEEK', subtitle:'A snapshot of how PartsCheck powered your business this week',
+    quotes:{ val:'12', sub:'101 parts requested', trend:'&#9650; +5% vs last week', raw:12 },
+    orders:{ val:'8', sub:'68 parts ordered', trend:'&#9650; +4%', raw:8 },
+    spend: { val:'$7.8K', sub:'$618 avg per job', trend:'&#9650; +3%', raw:7.8 },
+    margin:{ val:'24.2%', sub:'on 68 parts ordered', trend:'&#9650; +0.1pts', raw:24.2 },
+    hours:'14 hrs'
+  };
+
+  const MIX_DATA = {
+    today: { total:24, label:'today', items:[
+      { label:'OEM',          pct:46, count:11, color:'#337ab7' },
+      { label:'Aftermarket',  pct:29, count:7,  color:'#9b59b6' },
+      { label:'Recycled',     pct:17, count:4,  color:'#7DC21E' },
+      { label:'Alt/Parallel', pct:8,  count:2,  color:'#e67e22' },
+    ]},
+    week: { total:68, label:'this week', items:[
+      { label:'OEM',          pct:44, count:30, color:'#337ab7' },
+      { label:'Aftermarket',  pct:31, count:21, color:'#9b59b6' },
+      { label:'Recycled',     pct:18, count:12, color:'#7DC21E' },
+      { label:'Alt/Parallel', pct:7,  count:5,  color:'#e67e22' },
+    ]},
+    month: { total:500, label:'this month', items:[
+      { label:'OEM',          pct:44, count:220, color:'#337ab7' },
+      { label:'Aftermarket',  pct:31, count:155, color:'#9b59b6' },
+      { label:'Recycled',     pct:17, count:85,  color:'#7DC21E' },
+      { label:'Alt/Parallel', pct:8,  count:40,  color:'#e67e22' },
+    ]}
+  };
 
   // ── State ─────────────────────────────────────────────────────────────────
   let currentMonthIdx = 11;
   let trendMode = 'qtr';
   let tooltipInnerMode = 'qtr';
+  let periodMode = 'month';
+
+  // ── Part Type Mix widget ───────────────────────────────────────────────────
+  function renderMixWidget(key) {
+    const d = MIX_DATA[key];
+    const items = d.items;
+
+    // Stacked bar
+    let barHtml = '<div class="mix-bar">';
+    items.forEach(function(it, i) {
+      const radius = i === 0 ? 'border-radius:2px 0 0 2px' : (i === items.length - 1 ? 'border-radius:0 2px 2px 0' : '');
+      barHtml += '<div class="mix-seg" style="width:' + it.pct + '%;background:' + it.color + ';' + radius + '"></div>';
+    });
+    barHtml += '</div>';
+
+    // Legend
+    let legendHtml = '<div class="mix-legend">';
+    items.forEach(function(it) {
+      legendHtml += '<div class="mix-legend-item"><div class="mix-dot" style="background:' + it.color + '"></div>' + it.label + ' <strong style="color:' + it.color + '">' + it.pct + '%</strong></div>';
+    });
+    legendHtml += '</div>';
+
+    // Detail rows
+    let detailHtml = '<div class="mix-detail">';
+    items.forEach(function(it) {
+      detailHtml += '<div class="mix-detail-row"><div class="left"><div class="mix-dot" style="background:' + it.color + '"></div><span style="color:#666">' + it.label + '</span></div><div class="right"><span class="count">' + it.count + ' parts</span><span style="font-weight:700;color:' + it.color + ';min-width:28px;text-align:right">' + it.pct + '%</span></div></div>';
+    });
+    detailHtml += '</div>';
+
+    document.getElementById('mixWidgetBody').innerHTML = barHtml + legendHtml + detailHtml;
+    document.getElementById('mixFooter').textContent = d.total + ' parts ordered ' + d.label;
+  }
+
+  // ── Period toggle ──────────────────────────────────────────────────────────
+  function setPeriodMode(mode) {
+    periodMode = mode;
+
+    // Update pill active states
+    ['periodToday','periodWeek','periodMonth'].forEach(function(id) {
+      document.getElementById(id).classList.remove('active');
+    });
+    const pillMap = { today:'periodToday', week:'periodWeek', month:'periodMonth' };
+    document.getElementById(pillMap[mode]).classList.add('active');
+
+    // Show/hide month nav
+    document.getElementById('monthNavWrap').style.display = (mode === 'month') ? '' : 'none';
+
+    if (mode === 'today') {
+      updateDashboard(TODAY_DATA);
+    } else if (mode === 'week') {
+      updateDashboard(WEEK_DATA);
+    } else {
+      updateDashboard(MONTHS_DATA[currentMonthIdx]);
+    }
+  }
 
   // ── Sparkline ─────────────────────────────────────────────────────────────
   function getSlice(kpiKey, idx, innerMode) {
     const start = innerMode === 'ytd' ? 0 : Math.max(0, idx - 2);
-    return MONTHS_DATA.slice(start, idx + 1).map((m, i) => ({
-      value: m[kpiKey].raw,
-      label: MO[start + i]
-    }));
+    return MONTHS_DATA.slice(start, idx + 1).map(function(m, i) {
+      return { value: m[kpiKey].raw, label: MO[start + i] };
+    });
   }
 
   function buildSparkSVG(pts, color, gradId) {
     const n = pts.length;
-    const values = pts.map(p => p.value);
-    const labels = pts.map(p => p.label);
+    const values = pts.map(function(p) { return p.value; });
+    const labels = pts.map(function(p) { return p.label; });
     const svgW = n <= 3 ? 110 : n <= 6 ? 140 : 170;
     const H = 44, pX = 10, pY = 6;
-    const minV = Math.min(...values), maxV = Math.max(...values);
+    const minV = Math.min.apply(null, values), maxV = Math.max.apply(null, values);
     const range = maxV - minV || maxV * 0.1 || 1;
 
-    const coords = values.map((v, i) => {
+    const coords = values.map(function(v, i) {
       const x = n === 1 ? svgW / 2 : (pX + (i / (n - 1)) * (svgW - pX * 2));
       const y = pY + (1 - (v - minV) / range) * (H - pY * 2);
       return { x: +x.toFixed(1), y: +y.toFixed(1), label: labels[i], last: i === n - 1 };
     });
 
-    const ptsStr = coords.map(c => c.x + ',' + c.y).join(' ');
+    const ptsStr = coords.map(function(c) { return c.x + ',' + c.y; }).join(' ');
     const f = coords[0], l = coords[coords.length - 1];
     const areaD = 'M' + f.x + ',' + f.y + ' ' +
-      coords.slice(1).map(c => 'L' + c.x + ',' + c.y).join(' ') +
+      coords.slice(1).map(function(c) { return 'L' + c.x + ',' + c.y; }).join(' ') +
       ' L' + l.x + ',' + (H - pY + 4) + ' L' + f.x + ',' + (H - pY + 4) + ' Z';
 
     const fs = n > 8 ? 7 : 8;
-    const showLbl = i => n <= 6 || i === 0 || i % 3 === 0 || i === n - 1;
+    const showLbl = function(i) { return n <= 6 || i === 0 || i % 3 === 0 || i === n - 1; };
 
-    const dots = coords.map(c =>
-      '<circle cx="' + c.x + '" cy="' + c.y + '" r="' + (c.last ? 3 : 1.8) + '" fill="' + (c.last ? color : '#fff') + '" stroke="' + color + '" stroke-width="1.5"/>'
-    ).join('');
+    const dots = coords.map(function(c) {
+      return '<circle cx="' + c.x + '" cy="' + c.y + '" r="' + (c.last ? 3 : 1.8) + '" fill="' + (c.last ? color : '#fff') + '" stroke="' + color + '" stroke-width="1.5"/>';
+    }).join('');
 
-    const lbls = coords.map((c, i) => showLbl(i)
-      ? '<text x="' + c.x + '" y="' + (H + 11) + '" text-anchor="middle" font-size="' + fs + '" fill="' + (c.last ? color : '#aaa') + '" font-weight="' + (c.last ? 700 : 400) + '" font-family="Arial,sans-serif">' + c.label + '</text>'
-      : ''
-    ).join('');
+    const lbls = coords.map(function(c, i) {
+      return showLbl(i) ? '<text x="' + c.x + '" y="' + (H + 11) + '" text-anchor="middle" font-size="' + fs + '" fill="' + (c.last ? color : '#aaa') + '" font-weight="' + (c.last ? 700 : 400) + '" font-family="Arial,sans-serif">' + c.label + '</text>' : '';
+    }).join('');
 
     return '<svg width="' + svgW + '" height="' + (H + 16) + '" viewBox="0 0 ' + svgW + ' ' + (H + 16) + '" style="display:block;overflow:visible">' +
       '<defs><linearGradient id="' + gradId + '" x1="0" y1="0" x2="0" y2="1">' +
@@ -642,6 +736,10 @@
   }
 
   function buildTooltipContent(kpiName, kpiKey, displayVal, color, gradId) {
+    if (periodMode !== 'month') {
+      return '<div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div>' +
+        '<div class="tooltip-content"><div class="tooltip-note">Monthly trend available<br>in THIS MONTH view</div></div>';
+    }
     const innerMode = trendMode === 'toggle' ? tooltipInnerMode : trendMode;
     const slice = getSlice(kpiKey, currentMonthIdx, innerMode);
     const suffix = innerMode === 'ytd' ? 'YEAR TO DATE' : 'QTR TREND';
@@ -653,15 +751,15 @@
         '<button class="tt-btn ' + (tooltipInnerMode === 'ytd' ? 'active' : '') + '" onclick="setTooltipInnerMode(\'ytd\')">YTD</button>' +
         '</div>';
     }
-    html += '<div class="tooltip-title">' + kpiName + ' \u2013 ' + suffix + '</div>';
+    html += '<div class="tooltip-title">' + kpiName + ' – ' + suffix + '</div>';
     html += buildSparkSVG(slice, color, gradId);
     html += '<div class="tooltip-footer">' + displayVal + '<span>current</span></div>';
     return html;
   }
 
   // ── Dashboard update ──────────────────────────────────────────────────────
-  function updateDashboard(idx) {
-    const m = MONTHS_DATA[idx];
+  function updateDashboard(data) {
+    const m = data;
 
     // KPI values
     document.getElementById('kpiQuotesVal').textContent = m.quotes.val;
@@ -673,63 +771,94 @@
     document.getElementById('kpiSpendVal').textContent = m.spend.val;
     document.getElementById('kpiSpendSub').textContent = m.spend.sub;
     document.getElementById('kpiSpendTrend').innerHTML = '<span class="trend-up">' + m.spend.trend + '</span> vs same period last mo.';
-    document.getElementById('kpiProfitVal').textContent = m.profit.val;
-    document.getElementById('kpiProfitSub').textContent = m.profit.sub;
-    document.getElementById('kpiProfitTrend').innerHTML = '<span class="trend-up">' + m.profit.trend + '</span> margin vs last mo.';
+    document.getElementById('kpiMarginVal').textContent = m.margin.val;
+    document.getElementById('kpiMarginSub').textContent = m.margin.sub;
+    document.getElementById('kpiMarginTrend').innerHTML = '<span class="trend-up">' + m.margin.trend + '</span> margin vs last mo.';
     document.getElementById('kpiHoursVal').textContent = m.hours;
 
-    // Header
-    document.getElementById('mtdMonthBadge').textContent = m.label;
+    // Header title
+    const titleMap = { today:'TODAY IN NUMBERS', week:'WEEK TO DATE IN NUMBERS', month:'MONTH TO DATE IN NUMBERS' };
+    document.getElementById('mtdTitle').textContent = titleMap[periodMode];
     document.getElementById('mtdSubtitle').textContent = m.subtitle;
-    document.getElementById('mixMonthBadge').textContent = m.label;
-    document.getElementById('complianceMonth').textContent = m.label;
 
-    // Nav buttons
-    document.getElementById('btnPrevMonth').disabled = (idx === 0);
-    document.getElementById('btnNextMonth').disabled = (idx === MONTHS_DATA.length - 1);
+    // Badge
+    if (periodMode === 'month') {
+      document.getElementById('mtdMonthBadge').textContent = m.label;
+      document.getElementById('mixPeriodBadge').textContent = m.label;
+      document.getElementById('complianceMonth').textContent = m.label;
+    } else {
+      const periodLabel = periodMode === 'today' ? 'TODAY' : 'THIS WEEK';
+      document.getElementById('mixPeriodBadge').textContent = periodLabel;
+    }
+
+    // Month nav buttons (only meaningful in month mode)
+    if (periodMode === 'month') {
+      document.getElementById('btnPrevMonth').disabled = (currentMonthIdx === 0);
+      document.getElementById('btnNextMonth').disabled = (currentMonthIdx === MONTHS_DATA.length - 1);
+    }
 
     // Tooltip contents
     const GREEN = '#1B9B3B';
-    document.getElementById('tooltipQS').querySelector('.tooltip-content').innerHTML =
-      buildTooltipContent('Quotes Sent', 'quotes', m.quotes.val, GREEN, 'gQS');
-    document.getElementById('tooltipOP').querySelector('.tooltip-content').innerHTML =
-      buildTooltipContent('Orders Placed', 'orders', m.orders.val, GREEN, 'gOP');
-    document.getElementById('tooltipTS').querySelector('.tooltip-content').innerHTML =
-      buildTooltipContent('Total Spend', 'spend', m.spend.val, GREEN, 'gTS');
-    document.getElementById('tooltipPP').querySelector('.tooltip-content').innerHTML =
-      buildTooltipContent('Parts Profit', 'profit', m.profit.val, GREEN, 'gPP');
+    const tooltipNote = '<div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div><div class="tooltip-content"><div class="tooltip-note">Monthly trend available<br>in THIS MONTH view</div></div>';
+
+    if (periodMode === 'month') {
+      document.getElementById('tooltipQS').innerHTML = '<div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div><div class="tooltip-content">' + buildTooltipContent('Quotes Sent', 'quotes', m.quotes.val, GREEN, 'gQS') + '</div>';
+      document.getElementById('tooltipOP').innerHTML = '<div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div><div class="tooltip-content">' + buildTooltipContent('Orders Placed', 'orders', m.orders.val, GREEN, 'gOP') + '</div>';
+      document.getElementById('tooltipTS').innerHTML = '<div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div><div class="tooltip-content">' + buildTooltipContent('Total Spend', 'spend', m.spend.val, GREEN, 'gTS') + '</div>';
+      document.getElementById('tooltipPP').innerHTML = '<div class="tooltip-arrow"></div><div class="tooltip-arrow-inner"></div><div class="tooltip-content">' + buildTooltipContent('Parts Margin', 'margin', m.margin.val, GREEN, 'gPP') + '</div>';
+    } else {
+      document.getElementById('tooltipQS').innerHTML = tooltipNote;
+      document.getElementById('tooltipOP').innerHTML = tooltipNote;
+      document.getElementById('tooltipTS').innerHTML = tooltipNote;
+      document.getElementById('tooltipPP').innerHTML = tooltipNote;
+    }
 
     // Toggle mode: enable pointer events on cells
-    ['cellQS','cellOP','cellTS','cellPP'].forEach(id => {
+    ['cellQS','cellOP','cellTS','cellPP'].forEach(function(id) {
       document.getElementById(id).classList.toggle('toggle-active', trendMode === 'toggle');
     });
 
     // Demo bar active button
-    ['demoBtnQtr','demoBtnYtd','demoBtnToggle'].forEach(id => {
+    ['demoBtnQtr','demoBtnYtd','demoBtnToggle'].forEach(function(id) {
       document.getElementById(id).classList.remove('active');
     });
     const activeBtn = trendMode === 'qtr' ? 'demoBtnQtr' : trendMode === 'ytd' ? 'demoBtnYtd' : 'demoBtnToggle';
     document.getElementById(activeBtn).classList.add('active');
+
+    // Part Type Mix
+    renderMixWidget(periodMode);
   }
 
   // ── Mode setters (global for inline onclick) ──────────────────────────────
   function setTrendMode(mode) {
     trendMode = mode;
     tooltipInnerMode = 'qtr';
-    updateDashboard(currentMonthIdx);
+    if (periodMode === 'month') {
+      updateDashboard(MONTHS_DATA[currentMonthIdx]);
+    } else if (periodMode === 'today') {
+      updateDashboard(TODAY_DATA);
+    } else {
+      updateDashboard(WEEK_DATA);
+    }
   }
 
   function setTooltipInnerMode(mode) {
     tooltipInnerMode = mode;
-    updateDashboard(currentMonthIdx);
+    updateDashboard(MONTHS_DATA[currentMonthIdx]);
   }
 
   // ── Month nav ─────────────────────────────────────────────────────────────
   document.getElementById('btnPrevMonth').addEventListener('click', function() {
-    if (currentMonthIdx > 0) { currentMonthIdx--; updateDashboard(currentMonthIdx); }
+    if (periodMode === 'month' && currentMonthIdx > 0) {
+      currentMonthIdx--;
+      updateDashboard(MONTHS_DATA[currentMonthIdx]);
+    }
   });
   document.getElementById('btnNextMonth').addEventListener('click', function() {
-    if (currentMonthIdx < MONTHS_DATA.length - 1) { currentMonthIdx++; updateDashboard(currentMonthIdx); }
+    if (periodMode === 'month' && currentMonthIdx < MONTHS_DATA.length - 1) {
+      currentMonthIdx++;
+      updateDashboard(MONTHS_DATA[currentMonthIdx]);
+    }
   });
 
   // ── Knowledge Centre ──────────────────────────────────────────────────────
@@ -741,7 +870,7 @@
       var isLatest = i === 0;
       var lastSeen = localStorage.getItem('pc_last_seen_version');
       var isUnseen = isLatest && lastSeen !== r.version;
-      html += '<div class="kc-card' + (i === kcSelectedIdx ? ' active' : '') + (isLatest ? '' : '') +
+      html += '<div class="kc-card' + (i === kcSelectedIdx ? ' active' : '') +
         '" onclick="selectRelease(' + i + ')">' +
         '<div class="kc-card-badges">' +
         '<span class="kc-card-version' + (isLatest ? '' : ' prev') + '">' + r.version + '</span>' +
@@ -786,7 +915,6 @@
     document.getElementById('kcView').classList.add('active');
     buildKCSidebar();
     buildKCDetail(kcSelectedIdx);
-    // Mark as seen when they visit the page
     localStorage.setItem('pc_last_seen_version', RELEASES[0].version);
     var badge = document.getElementById('kcNewBadge');
     if (badge) badge.style.display = 'none';
@@ -825,14 +953,14 @@
       { label:'Avg Parts Basket',actual:621,  target:500, unit:'$', hi:false },
     ];
     const container = document.getElementById('complianceBody');
-    bars.forEach(b => {
+    bars.forEach(function(b) {
       const isGood = b.hi ? b.actual >= b.target : b.actual <= b.target;
       const isWarn = b.hi ? (b.actual >= b.target*0.85 && b.actual < b.target) : (b.actual <= b.target*1.25 && b.actual > b.target);
       const color = isGood ? 'var(--green-dark)' : isWarn ? 'var(--amber)' : 'var(--red)';
       const max = Math.max(b.actual, b.target) * (b.hi ? 1.15 : 1.3);
       const aPct = Math.min((b.actual/max)*100,100);
       const tPct = Math.min((b.target/max)*100,100);
-      const fmt = v => b.unit==='$' ? '$'+v.toLocaleString() : v+'%';
+      const fmt = function(v) { return b.unit==='$' ? '$'+v.toLocaleString() : v+'%'; };
       const div = document.createElement('div');
       div.className = 'target-bar';
       div.innerHTML = '<div class="target-bar-header"><span class="name">'+b.label+'</span><div class="values"><span class="actual" style="color:'+color+'">'+fmt(b.actual)+'</span><span class="target">target '+fmt(b.target)+'</span></div></div><div class="bar-track"><div class="bar-fill" style="width:'+aPct+'%;background:'+color+'"></div><div class="bar-marker" style="left:'+tPct+'%"></div></div>';
@@ -843,15 +971,27 @@
   // ── Releases / What's New ─────────────────────────────────────────────────
   const RELEASES = [
     {
+      version: 'v1.3',
+      date: 'May 2026',
+      title: 'Period Toggle, Parts Margin & Part Type Mix',
+      description: 'See your performance today, this week, or this month — and track parts margin % without confidential dollar figures.',
+      features: [
+        { icon: '&#128197;', text: 'Period toggle: switch between TODAY, THIS WEEK, and THIS MONTH to see in-period data before month end' },
+        { icon: '&#128200;', text: 'Parts Margin now shows margin % as the hero number — safe to view across all user types' },
+        { icon: '&#9994;', text: 'Part Type Mix now includes Alt/Parallel parts and renamed Used → Recycled to match industry terminology' },
+        { icon: '&#128270;', text: 'Part Type Mix footer and badge update dynamically to match the selected period' },
+      ]
+    },
+    {
       version: 'v1.2',
       date: 'May 2026',
       title: 'Month Navigation & Hours Saved',
       description: 'You can now scroll back through your monthly history and track hours saved across every month.',
       features: [
-        { icon: '📅', text: 'Navigate back through each month with prev / next arrows' },
-        { icon: '⏱', text: 'Hours Saved now tracked and shown across all months' },
-        { icon: '📄', text: 'Smart Receipting — invoices matched to orders automatically' },
-        { icon: '📈', text: 'KPI tooltips now support QTR and YTD trend switching' },
+        { icon: '&#128197;', text: 'Navigate back through each month with prev / next arrows' },
+        { icon: '&#8987;', text: 'Hours Saved now tracked and shown across all months' },
+        { icon: '&#128196;', text: 'Smart Receipting — invoices matched to orders automatically' },
+        { icon: '&#128200;', text: 'KPI tooltips now support QTR and YTD trend switching' },
       ]
     },
     {
@@ -860,10 +1000,10 @@
       title: 'Value Dashboard Pilot Launch',
       description: 'Your personalised view of PartsCheck activity — quotes, orders, profit and compliance in one place.',
       features: [
-        { icon: '💰', text: 'Parts Profit tracking with margin %' },
-        { icon: '✅', text: 'Insurer Compliance target bars — actual vs. target' },
-        { icon: '🔧', text: 'Part Type Mix breakdown (OEM / Aftermarket / Recycled)' },
-        { icon: '⚠️', text: 'Missed Savings alert widget' },
+        { icon: '&#128176;', text: 'Parts Profit tracking with margin %' },
+        { icon: '&#9989;', text: 'Insurer Compliance target bars — actual vs. target' },
+        { icon: '&#128295;', text: 'Part Type Mix breakdown (OEM / Aftermarket / Recycled)' },
+        { icon: '&#9888;', text: 'Missed Savings alert widget' },
       ]
     }
   ];
@@ -909,7 +1049,6 @@
   function closeWhatNew() {
     document.getElementById('wnBackdrop').classList.remove('open');
     document.body.style.overflow = '';
-    // Don't mark as seen on dismiss — KC badge stays until they visit the KC page
   }
 
   function handleBackdropClick(e) {
@@ -929,7 +1068,7 @@
   }
 
   // ── Init ──────────────────────────────────────────────────────────────────
-  updateDashboard(currentMonthIdx);
+  updateDashboard(MONTHS_DATA[currentMonthIdx]);
   checkWhatNew();
 </script>
 </body>
