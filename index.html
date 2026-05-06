@@ -280,23 +280,38 @@
   .outage-dismiss:hover { opacity:1; }
 
   /* KC STATUS CARD */
-  .kc-status-card { margin:8px 0 0; background:#fff; border:1px solid #e0e0e0; border-radius:4px; padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:box-shadow .15s; text-decoration:none; color:inherit; }
-  .kc-status-card:hover { box-shadow:0 2px 8px rgba(0,0,0,.1); }
-  .kc-status-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+  .kc-header-status { display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:600; color:#555; text-decoration:none; border:1px solid #e0e0e0; border-radius:20px; padding:5px 12px 5px 10px; background:#fff; transition:box-shadow .15s; margin-left:auto; align-self:flex-start; }
+  .kc-header-status:hover { box-shadow:0 1px 6px rgba(0,0,0,.1); color:#333; }
+  .kc-header-status-arrow { font-size:11px; color:#bbb; }
+  /* SYSTEM STATUS TAB PANE */
+  .kc-status-tab-dot { width:7px; height:7px; border-radius:50%; background:#22C55E; display:inline-block; margin-left:6px; vertical-align:middle; flex-shrink:0; }
+  .kc-status-tab-dot.incident { background:#F59E0B; animation:pulse-amber 1.5s infinite; }
+  .kc-status-tab-dot.outage { background:#EF4444; animation:pulse-red 1.5s infinite; }
+  .status-pane { flex:1; padding:40px 48px; overflow-y:auto; background:#f5f5f5; flex-direction:column; align-items:flex-start; gap:0; }
+  .status-pane.active { display:flex; }
+  .status-hero { background:#fff; border:1px solid #e0e0e0; border-radius:6px; padding:32px 36px; width:100%; max-width:560px; display:flex; flex-direction:column; gap:20px; }
+  .status-hero-row { display:flex; align-items:center; gap:16px; }
+  .status-big-dot { width:20px; height:20px; border-radius:50%; flex-shrink:0; }
+  .status-big-dot.ok { background:#22C55E; box-shadow:0 0 0 5px rgba(34,197,94,.15); }
+  .status-big-dot.incident { background:#F59E0B; box-shadow:0 0 0 5px rgba(245,158,11,.2); animation:pulse-amber 1.5s infinite; }
+  .status-big-dot.outage { background:#EF4444; box-shadow:0 0 0 5px rgba(239,68,68,.2); animation:pulse-red 1.5s infinite; }
+  .status-hero-title { font-size:18px; font-weight:700; color:#222; }
+  .status-hero-desc { font-size:12px; color:#666; line-height:1.6; }
+  .status-hero-updated { font-size:10px; color:#aaa; border-top:1px solid #f0f0f0; padding-top:14px; }
+  .status-cta { display:inline-flex; align-items:center; gap:8px; background:var(--green-dark); color:#fff; font-size:11px; font-weight:700; letter-spacing:0.4px; text-decoration:none; padding:9px 18px; border-radius:3px; transition:opacity .15s; }
+  .status-cta:hover { opacity:.85; }
+  .status-hint { margin-top:20px; font-size:11px; color:#999; line-height:1.6; max-width:480px; }
+  .kc-status-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
   .kc-status-dot.ok { background:#22C55E; box-shadow:0 0 0 3px rgba(34,197,94,.2); }
   .kc-status-dot.incident { background:#F59E0B; box-shadow:0 0 0 3px rgba(245,158,11,.25); animation:pulse-amber 1.5s infinite; }
   .kc-status-dot.outage { background:#EF4444; box-shadow:0 0 0 3px rgba(239,68,68,.25); animation:pulse-red 1.5s infinite; }
   @keyframes pulse-amber { 0%,100%{box-shadow:0 0 0 3px rgba(245,158,11,.25)} 50%{box-shadow:0 0 0 6px rgba(245,158,11,.1)} }
   @keyframes pulse-red { 0%,100%{box-shadow:0 0 0 3px rgba(239,68,68,.25)} 50%{box-shadow:0 0 0 6px rgba(239,68,68,.1)} }
-  .kc-status-text { flex:1; }
-  .kc-status-label { font-size:11px; font-weight:700; color:#222; }
-  .kc-status-sub { font-size:10px; color:#888; margin-top:2px; }
-  .kc-status-arrow { font-size:14px; color:#bbb; flex-shrink:0; }
 
   /* DEMO TOGGLE */
   .demo-strip { position:fixed; bottom:0; left:50%; transform:translateX(-50%); background:#1a1a2e; color:#fff; display:flex; align-items:center; gap:0; border-radius:8px 8px 0 0; overflow:hidden; z-index:9999; font-size:10px; font-weight:700; letter-spacing:0.5px; box-shadow:0 -2px 12px rgba(0,0,0,.2); }
   .demo-strip-label { padding:8px 14px; color:#aaa; text-transform:uppercase; border-right:1px solid #333; white-space:nowrap; }
-  .demo-btn { padding:8px 16px; cursor:pointer; color:#fff; text-transform:uppercase; border-right:1px solid #333; white-space:nowrap; transition:background .15s; }
+  .demo-btn { background:transparent; padding:8px 16px; cursor:pointer; color:#fff; text-transform:uppercase; border-right:1px solid #333; border-radius:0; border-top:none; border-bottom:none; border-left:none; white-space:nowrap; transition:background .15s; font-size:10px; font-weight:700; letter-spacing:0.5px; }
   .demo-btn:hover { background:#2a2a4e; }
   .demo-btn.active { background:#1B9B3B; color:#fff; }
   .demo-btn:last-child { border-right:none; }
@@ -546,10 +561,16 @@
           <h2>Knowledge Centre</h2>
           <p>Tutorials, guides, and a full record of everything we've shipped</p>
         </div>
+        <a href="https://status.partscheck.com.au/" target="_blank" class="kc-header-status" id="kcHeaderStatus">
+          <span class="kc-status-dot ok" id="kcStatusDot"></span>
+          <span id="kcStatusLabel">All Systems Operational</span>
+          <span class="kc-header-status-arrow">↗</span>
+        </a>
       </div>
       <div class="kc-tabs">
         <div class="kc-tab active" id="kcTabTutorials" onclick="switchKcTab('tutorials')">Videos &amp; Tutorials</div>
         <div class="kc-tab" id="kcTabReleases" onclick="switchKcTab('releases')">Release Notes</div>
+        <div class="kc-tab" id="kcTabStatus" onclick="switchKcTab('status')">System Status<span class="kc-status-tab-dot" id="kcTabStatusDot" style="display:none"></span></div>
       </div>
     </div>
 
@@ -590,18 +611,20 @@
           </div>
         </div>
       </div>
-      <!-- SYSTEM STATUS -->
-      <div>
-        <div class="tut-section-label">System Status</div>
-        <a href="https://status.partscheck.com.au/" target="_blank" class="kc-status-card" id="kcStatusCard">
-          <div class="kc-status-dot ok" id="kcStatusDot"></div>
-          <div class="kc-status-text">
-            <div class="kc-status-label" id="kcStatusLabel">All Systems Operational</div>
-            <div class="kc-status-sub" id="kcStatusSub">No incidents reported · status.partscheck.com.au</div>
-          </div>
-          <div class="kc-status-arrow">↗</div>
-        </a>
+    </div>
+
+    <!-- SYSTEM STATUS TAB -->
+    <div class="kc-tab-pane status-pane" id="kcPaneStatus">
+      <div class="status-hero">
+        <div class="status-hero-row">
+          <div class="status-big-dot ok" id="statusBigDot"></div>
+          <div class="status-hero-title" id="statusHeroTitle">All Systems Operational</div>
+        </div>
+        <div class="status-hero-desc" id="statusHeroDesc">PartsCheck is running normally. All features including Quote Pricing, Orders, and the Value Dashboard are available.</div>
+        <a href="https://status.partscheck.com.au/" target="_blank" class="status-cta">View full status page ↗</a>
+        <div class="status-hero-updated" id="statusHeroUpdated">Last checked: just now · Powered by status.partscheck.com.au</div>
       </div>
+      <div class="status-hint">Bookmark <strong>status.partscheck.com.au</strong> to check service availability even when you can't log in to PartsCheck.</div>
     </div>
 
     <!-- RELEASE NOTES TAB -->
@@ -1084,6 +1107,9 @@
     if (tab === 'tutorials') {
       document.getElementById('kcTabTutorials').classList.add('active');
       document.getElementById('kcPaneTutorials').classList.add('active');
+    } else if (tab === 'status') {
+      document.getElementById('kcTabStatus').classList.add('active');
+      document.getElementById('kcPaneStatus').classList.add('active');
     } else {
       document.getElementById('kcTabReleases').classList.add('active');
       document.getElementById('kcPaneReleases').classList.add('active');
@@ -1256,11 +1282,14 @@
 
   function setDemoStatus(s) {
     demoStatus = s;
-    var banner = document.getElementById('outageBanner');
-    var dot    = document.getElementById('kcStatusDot');
-    var label  = document.getElementById('kcStatusLabel');
-    var sub    = document.getElementById('kcStatusSub');
-    var btns   = document.querySelectorAll('.demo-btn');
+    var banner    = document.getElementById('outageBanner');
+    var dot       = document.getElementById('kcStatusDot');
+    var label     = document.getElementById('kcStatusLabel');
+    var bigDot    = document.getElementById('statusBigDot');
+    var heroTitle = document.getElementById('statusHeroTitle');
+    var heroDesc  = document.getElementById('statusHeroDesc');
+    var tabDot    = document.getElementById('kcTabStatusDot');
+    var btns      = document.querySelectorAll('.demo-btn');
     btns.forEach(function(b) { b.classList.remove('active'); });
     document.getElementById('demoBtn_' + s).classList.add('active');
 
@@ -1268,7 +1297,10 @@
       banner.classList.remove('show','critical');
       dot.className = 'kc-status-dot ok';
       label.textContent = 'All Systems Operational';
-      sub.textContent = 'No incidents reported · status.partscheck.com.au';
+      bigDot.className = 'status-big-dot ok';
+      heroTitle.textContent = 'All Systems Operational';
+      heroDesc.textContent = 'PartsCheck is running normally. All features including Quote Pricing, Orders, and the Value Dashboard are available.';
+      tabDot.style.display = 'none';
     } else if (s === 'incident') {
       banner.classList.add('show');
       banner.classList.remove('critical');
@@ -1276,14 +1308,22 @@
       document.getElementById('outageDesc').textContent = 'PartsCheck is experiencing issues with Quote Pricing. Our team is investigating.';
       dot.className = 'kc-status-dot incident';
       label.textContent = 'Partial Outage — Quote Pricing';
-      sub.textContent = 'Degraded performance · Updated 5 min ago · status.partscheck.com.au';
+      bigDot.className = 'status-big-dot incident';
+      heroTitle.textContent = 'Partial Outage — Quote Pricing';
+      heroDesc.textContent = 'Some repairers may experience delays when requesting prices from suppliers. Our team is actively investigating. Orders and the Value Dashboard are unaffected.';
+      tabDot.className = 'kc-status-tab-dot incident';
+      tabDot.style.display = '';
     } else {
       banner.classList.add('show','critical');
       document.getElementById('outageTitle').textContent = 'Major Outage';
       document.getElementById('outageDesc').textContent = 'PartsCheck is currently unavailable. Engineers are working to restore service.';
       dot.className = 'kc-status-dot outage';
       label.textContent = 'Major Outage — All Systems Affected';
-      sub.textContent = 'Platform unreachable · Updated 2 min ago · status.partscheck.com.au';
+      bigDot.className = 'status-big-dot outage';
+      heroTitle.textContent = 'Major Outage — All Systems Affected';
+      heroDesc.textContent = 'PartsCheck is currently unavailable. Our engineering team is working to restore service as quickly as possible. Check the status page for live updates.';
+      tabDot.className = 'kc-status-tab-dot outage';
+      tabDot.style.display = '';
     }
   }
 
