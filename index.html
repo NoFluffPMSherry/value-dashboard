@@ -168,13 +168,38 @@
   .my-pc-dropdown a:hover svg { fill: var(--green-dark); }
   .my-pc-sep { height: 1px; background: #eee; margin: 4px 0; }
 
-  /* WHAT'S NEW TRIGGER */
-  .wn-trigger { display:inline-flex; align-items:center; gap:4px; cursor:pointer; color:var(--green-dark); font-weight:800; font-size:10px; letter-spacing:0.4px; padding:2px 7px 2px 5px; border:1.5px solid var(--green-dark); border-radius:2px; transition:background .12s; user-select:none; }
-  .wn-trigger:hover { background:var(--green-dark); color:#fff; }
-  .wn-trigger:hover .wn-dot { background:#fff; animation:none; }
-  .wn-dot { width:6px; height:6px; border-radius:50%; background:var(--red); flex-shrink:0; animation:wnPulse 1.5s ease-in-out infinite; }
-  .wn-dot.hidden { display:none; }
-  @keyframes wnPulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+  /* KNOWLEDGE CENTRE VIEW */
+  .kc-view { display:none; flex-direction:column; min-height:calc(100vh - 110px); }
+  .kc-view.active { display:flex; }
+  .kc-page-header { background:#fff; border-bottom:1px solid #e0e0e0; padding:20px 28px 16px; flex-shrink:0; }
+  .kc-page-header h2 { font-size:16px; font-weight:800; color:#222; margin-bottom:3px; letter-spacing:0.2px; }
+  .kc-page-header p { font-size:11px; color:#999; }
+  .kc-body { display:flex; flex:1; min-height:0; }
+  .kc-sidebar { width:260px; min-width:260px; background:#fff; border-right:1px solid #e0e0e0; overflow-y:auto; padding:14px 0; }
+  .kc-sidebar-label { font-size:9px; font-weight:700; color:#aaa; letter-spacing:0.8px; text-transform:uppercase; padding:0 16px 10px; }
+  .kc-card { padding:11px 16px; border-bottom:1px solid #f0f0f0; cursor:pointer; border-left:3px solid transparent; transition:background .1s; }
+  .kc-card:hover { background:#f9f9f9; }
+  .kc-card.active { background:#f0f8f0; border-left-color:var(--green-dark); }
+  .kc-card-badges { display:flex; align-items:center; gap:6px; margin-bottom:4px; }
+  .kc-card-version { color:#fff; font-size:9px; font-weight:800; padding:1px 6px; border-radius:2px; letter-spacing:0.5px; background:var(--green-dark); }
+  .kc-card-version.prev { background:#aaa; }
+  .kc-card-date { font-size:10px; color:#aaa; }
+  .kc-card-new { background:#dc3545; color:#fff; font-size:7px; font-weight:800; padding:1px 4px; border-radius:2px; letter-spacing:0.4px; }
+  .kc-card-title { font-size:11px; font-weight:700; color:#333; line-height:1.35; }
+  .kc-detail { flex:1; padding:24px 28px; overflow-y:auto; background:#f5f5f5; }
+  .kc-detail-card { background:#fff; border:1px solid #e0e0e0; border-radius:4px; padding:26px 30px; max-width:680px; }
+  .kcd-badge-row { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+  .kcd-version { background:var(--green-dark); color:#fff; font-size:11px; font-weight:800; padding:3px 10px; border-radius:2px; letter-spacing:0.5px; }
+  .kcd-version.prev { background:#aaa; }
+  .kcd-date { font-size:11px; color:#888; }
+  .kcd-new { background:#dc3545; color:#fff; font-size:9px; font-weight:800; padding:2px 6px; border-radius:2px; letter-spacing:0.5px; }
+  .kcd-title { font-size:20px; font-weight:800; color:#222; margin-bottom:8px; line-height:1.3; }
+  .kcd-desc { font-size:12px; color:#666; margin-bottom:22px; line-height:1.75; border-bottom:1px solid #eee; padding-bottom:18px; }
+  .kcd-features-label { font-size:9px; font-weight:700; color:#aaa; letter-spacing:0.8px; text-transform:uppercase; margin-bottom:12px; }
+  .kcd-features { list-style:none; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .kcd-features li { display:flex; align-items:flex-start; gap:12px; padding:10px 14px; background:#f9f9f9; border-radius:3px; border:1px solid #eee; }
+  .kcd-feat-icon { font-size:16px; flex-shrink:0; line-height:1.3; }
+  .kcd-feat-text { font-size:11px; color:#333; line-height:1.55; }
 
   /* WHAT'S NEW MODAL */
   .wn-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,.48); z-index:1000; align-items:center; justify-content:center; }
@@ -244,7 +269,7 @@
     <div class="top-right">
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
         <div class="top-links">
-          <span class="wn-trigger" id="wnTrigger" onclick="openWhatNew()"><span class="wn-dot hidden" id="wnDot"></span>WHAT'S NEW</span>&nbsp;<span>|</span>&nbsp;<div class="my-pc-wrap" style="display:inline-block">
+          <div class="my-pc-wrap" style="display:inline-block">
             <span class="my-pc-toggle"><span style="display:inline-flex;align-items:center;justify-content:center;background:var(--green-dark);color:#fff;font-size:9px;font-weight:800;width:20px;height:18px;border-radius:2px;vertical-align:middle;margin-right:4px">MJ</span>MY PARTSCHECK &#9662;</span>
             <div class="my-pc-dropdown">
               <a href="#"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>Message Support</a>
@@ -262,15 +287,15 @@
 
   <!-- SUB NAV -->
   <div class="sub-nav">
-    <div class="sub-item active"><div class="sub-badge">&#9636;</div>DASHBOARD</div>
-    <div class="sub-item"><div class="sub-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#ccc"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="7" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></div>REPORTING</div>
-    <div class="sub-item"><div class="sub-badge" style="font-style:italic">i</div>KNOWLEDGE CENTRE</div>
-    <div class="sub-item"><div class="sub-badge">&#9881;</div>SETTINGS</div>
-    <div class="sub-item" style="margin-left:auto"><div class="sub-badge">&#9993;</div>MESSAGES<span class="msg-pill">3</span></div>
+    <div class="sub-item active" id="subDashboard"><div class="sub-badge">&#9636;</div>DASHBOARD</div>
+    <div class="sub-item" id="subReporting"><div class="sub-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#ccc"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="7" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></div>REPORTING</div>
+    <div class="sub-item" id="subKnowledge"><div class="sub-badge" style="font-style:italic">i</div>KNOWLEDGE CENTRE<span class="msg-pill" id="kcNewBadge" style="display:none">NEW</span></div>
+    <div class="sub-item" id="subSettings"><div class="sub-badge">&#9881;</div>SETTINGS</div>
+    <div class="sub-item" id="subMessages" style="margin-left:auto"><div class="sub-badge">&#9993;</div>MESSAGES<span class="msg-pill">3</span></div>
   </div>
 
   <!-- MAIN LAYOUT -->
-  <div class="main-layout">
+  <div class="main-layout" id="mainLayout">
 
     <!-- LEFT PANEL -->
     <div class="left-panel">
@@ -440,6 +465,23 @@
           <div class="widget-footer"><span class="meta">NLA parts causing job delays</span><a class="link" href="#">View Detail</a></div>
         </div>
 
+      </div>
+    </div>
+  </div>
+
+  <!-- KNOWLEDGE CENTRE VIEW -->
+  <div class="kc-view" id="kcView">
+    <div class="kc-page-header">
+      <h2>Release Notes &amp; Updates</h2>
+      <p>A log of everything shipped to your PartsCheck dashboard</p>
+    </div>
+    <div class="kc-body">
+      <div class="kc-sidebar">
+        <div class="kc-sidebar-label">All Releases</div>
+        <div id="kcSidebarList"></div>
+      </div>
+      <div class="kc-detail">
+        <div class="kc-detail-card" id="kcDetailCard"></div>
       </div>
     </div>
   </div>
@@ -690,10 +732,85 @@
     if (currentMonthIdx < MONTHS_DATA.length - 1) { currentMonthIdx++; updateDashboard(currentMonthIdx); }
   });
 
+  // ── Knowledge Centre ──────────────────────────────────────────────────────
+  var kcSelectedIdx = 0;
+
+  function buildKCSidebar() {
+    var html = '';
+    RELEASES.forEach(function(r, i) {
+      var isLatest = i === 0;
+      var lastSeen = localStorage.getItem('pc_last_seen_version');
+      var isUnseen = isLatest && lastSeen !== r.version;
+      html += '<div class="kc-card' + (i === kcSelectedIdx ? ' active' : '') + (isLatest ? '' : '') +
+        '" onclick="selectRelease(' + i + ')">' +
+        '<div class="kc-card-badges">' +
+        '<span class="kc-card-version' + (isLatest ? '' : ' prev') + '">' + r.version + '</span>' +
+        '<span class="kc-card-date">' + r.date + '</span>' +
+        (isUnseen ? '<span class="kc-card-new">NEW</span>' : '') +
+        '</div>' +
+        '<div class="kc-card-title">' + r.title + '</div>' +
+        '</div>';
+    });
+    document.getElementById('kcSidebarList').innerHTML = html;
+  }
+
+  function buildKCDetail(idx) {
+    var r = RELEASES[idx];
+    var isLatest = idx === 0;
+    var lastSeen = localStorage.getItem('pc_last_seen_version');
+    var isUnseen = isLatest && lastSeen !== r.version;
+    var html = '<div class="kcd-badge-row">' +
+      '<span class="kcd-version' + (isLatest ? '' : ' prev') + '">' + r.version + '</span>' +
+      '<span class="kcd-date">' + r.date + '</span>' +
+      (isUnseen ? '<span class="kcd-new">NEW</span>' : '') +
+      '</div>' +
+      '<div class="kcd-title">' + r.title + '</div>' +
+      '<div class="kcd-desc">' + r.description + '</div>' +
+      '<div class="kcd-features-label">What\'s included</div>' +
+      '<ul class="kcd-features">';
+    r.features.forEach(function(f) {
+      html += '<li><span class="kcd-feat-icon">' + f.icon + '</span><span class="kcd-feat-text">' + f.text + '</span></li>';
+    });
+    html += '</ul>';
+    document.getElementById('kcDetailCard').innerHTML = html;
+  }
+
+  function selectRelease(idx) {
+    kcSelectedIdx = idx;
+    buildKCSidebar();
+    buildKCDetail(idx);
+  }
+
+  function showKnowledgeCentre() {
+    document.getElementById('mainLayout').style.display = 'none';
+    document.getElementById('kcView').classList.add('active');
+    buildKCSidebar();
+    buildKCDetail(kcSelectedIdx);
+    // Mark as seen when they visit the page
+    localStorage.setItem('pc_last_seen_version', RELEASES[0].version);
+    var badge = document.getElementById('kcNewBadge');
+    if (badge) badge.style.display = 'none';
+  }
+
+  function showDashboard() {
+    document.getElementById('kcView').classList.remove('active');
+    document.getElementById('mainLayout').style.display = '';
+  }
+
   // ── Sub-nav ───────────────────────────────────────────────────────────────
-  document.querySelectorAll('.sub-item').forEach(item => {
-    item.addEventListener('click', function() {
-      document.querySelectorAll('.sub-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('subDashboard').addEventListener('click', function() {
+    document.querySelectorAll('.sub-item').forEach(function(i) { i.classList.remove('active'); });
+    this.classList.add('active');
+    showDashboard();
+  });
+  document.getElementById('subKnowledge').addEventListener('click', function() {
+    document.querySelectorAll('.sub-item').forEach(function(i) { i.classList.remove('active'); });
+    this.classList.add('active');
+    showKnowledgeCentre();
+  });
+  ['subReporting', 'subSettings', 'subMessages'].forEach(function(id) {
+    document.getElementById(id).addEventListener('click', function() {
+      document.querySelectorAll('.sub-item').forEach(function(i) { i.classList.remove('active'); });
       this.classList.add('active');
     });
   });
@@ -792,9 +909,7 @@
   function closeWhatNew() {
     document.getElementById('wnBackdrop').classList.remove('open');
     document.body.style.overflow = '';
-    localStorage.setItem('pc_last_seen_version', RELEASES[0].version);
-    var dot = document.getElementById('wnDot');
-    if (dot) dot.classList.add('hidden');
+    // Don't mark as seen on dismiss — KC badge stays until they visit the KC page
   }
 
   function handleBackdropClick(e) {
@@ -804,12 +919,12 @@
   function checkWhatNew() {
     var lastSeen = localStorage.getItem('pc_last_seen_version');
     var latest = RELEASES[0].version;
-    var dot = document.getElementById('wnDot');
+    var badge = document.getElementById('kcNewBadge');
     if (lastSeen !== latest) {
-      if (dot) dot.classList.remove('hidden');
+      if (badge) badge.style.display = '';
       setTimeout(openWhatNew, 700);
     } else {
-      if (dot) dot.classList.add('hidden');
+      if (badge) badge.style.display = 'none';
     }
   }
 
